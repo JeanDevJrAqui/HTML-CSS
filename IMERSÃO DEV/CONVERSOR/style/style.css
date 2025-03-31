@@ -1,5 +1,5 @@
 @charset "UTF-8";
-/* Global Styles */
+
 body {
     background-color: black;
     margin: 0;
@@ -7,40 +7,52 @@ body {
     font-family: Arial, sans-serif;
     color: white;
     position: relative;
-  }
-  
-  /* Logo Styles */
-  .logo {
+}
+
+.logo {
     position: absolute;
     top: 20px;
     right: 20px;
     max-width: 150px;
     width: auto;
-  }
-  
-  /* Container with the background image */
-  .container {
+}
+
+.container {
     background: url('../img/bg.jpg') no-repeat center center/cover;
-    min-height: 100vh;
+    min-height: 95.5vh;
     display: flex;
     justify-content: center;
     align-items: center;
-  }
-  
-  /* Content div for text and button */
-  .content {
+}
+
+.content {
     text-align: center;
     background-color: rgba(0, 0, 0, 0.5);
     padding: 20px 40px;
     border-radius: 8px;
-  }
-  
-  .content h2 {
+}
+
+.content h2 {
     margin-bottom: 20px;
-  }
-  
-  /* Button Styles */
-  button {
+}
+
+input {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    font-size: 1.1em;
+    border: none;
+    border-radius: 5px;
+}
+
+input[readonly] {
+    background-color: #ddd;
+    font-weight: bold;
+    text-align: center;
+}
+
+button {
     background-color: #ff1b7b;
     border: none;
     padding: 10px 20px;
@@ -48,15 +60,14 @@ body {
     color: white;
     cursor: pointer;
     transition: background-color 0.3s ease;
-  }
-  
-  button:hover {
+    margin-top: 10px;
+}
+
+button:hover {
     background-color: #1ABC9C;
-  }
-  
-  /* Footer Styles */
-  footer {
+}
+
+footer {
     text-align: center;
     padding: 10px;
-  }
-  
+}
