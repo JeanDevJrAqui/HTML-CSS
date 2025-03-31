@@ -1,0 +1,55 @@
+@charset "UTF-8";
+/*:: é o mesmo que pseudo elementos
+ e > é um filho da classe*/
+body{
+    font-family: Arial, Helvetica, sans-serif;
+}
+a{
+    color: black;
+    text-decoration: none;
+}
+a:hover{
+    text-decoration:underline ;
+}
+a::after{
+    content: '<--';
+}
+.primeira{
+    background-color: antiquewhite;
+    border: 1px solid black;
+    height: 300px;
+    width: 300px;
+    text-align: center;
+}
+.segunda{
+    background-color: rgb(80, 204, 90);
+    border: 1px solid black;
+    height: 300px;
+    width: 300px;
+    text-align: center;
+}
+.terceira{
+    background-color: rgb(147, 66, 172);
+    border: 1px solid black;
+    height: 300px;
+    width: 300px;
+    text-align: center;
+}
+/*div:hover{
+    background-color: rgb(206, 25, 25);
+}*/
+div.segunda > p {
+    display: none;
+    color: aquamarine;
+}
+div:hover > p {
+    display: block;
+}
+h3{
+    height: 50px;
+    width: 50px;
+    border-color: rgb(238, 142, 24);
+    padding-block: 500px;
+    margin-bottom: 500px;
+    outline-color: aqua;
+}

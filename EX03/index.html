@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-br  ">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Midias</title>
+</head>
+<body>
+    <h1>imagem dinamica</h1>
+    <p><h3>Quando quiser, permitir exibir imagens diferentes para diferentes tamanhos de tela ou dispositivos use a tag picture</h3></p>
+    <p><h3>A tag source media type te permite colocar tamanho maximo ou minimo para que aconteça a mudança de imagem e lembre-se de colocar o tipo de imagem no type</h3></p>
+    <picture>
+        <source media="(max-width:750px)" srcset="img/Small.png" type="image/png">
+        <source media="(max-width:1050px)" srcset="img/Medium.png" type="image/png">
+        <img src="img/Big.png" alt="imagem flexivel">
+    </picture>
+    <br><br><br><br>
+    <h1>AUDIO</h1>
+    <p><h3>Para tocar audio voce precisa da tag audio e adicionar o parametro controls para que o controle da musica seja exibido para o usuario</h3></p>
+    <p>Musicas HioHop</p>
+    <p><ol>
+        <li>LosingMyMind-NEFFEX <br><audio src="audios/LosingMyMindNEFFEX.mp3" controls></audio></li><br>
+        <li>TillI'monTop-NEFFEX<br><audio src="audios/TillI'monTopNEFFEX.mp3" controls></audio></li><br>
+    </ol></p>
+    <p><h3>Outra forma de fazer isso é criar apenas a tag audio e dentro dela criar a tag source, assim ao invés de usar srcset usará type para identificar o audio para que caso não seja compativel uma estençãod e video apareceça outra</h3></p>
+    <p>Musicas HioHop</p>
+    <p>
+        <ul>
+            <li>
+                TillI'monTop-NEFFEX<br><audio controls><source src="audios/TillI'monTopNEFFEX.mp3" type="audio/mp3"></audio>
+            </li>
+            <li>
+                LosingMyMind-NEFFEX <br><audio controls><source src="audios/LosingMyMindNEFFEX.mp3" type="audio/mp3"></audio>
+            </li>
+        </ul>
+    </p>
+    <br><br><br><br>
+    <h1>Videos para o site</h1>
+    <p>para adicionar um video voce usa a tag video e pode utilizar width para regular o tamanho na tela e controls para aparecer os controles do video ao usuario</p>
+    <p>Voce pode adicionar uma thumbnail ao video adicionando poster dentro da tag video e colocando o caminho da imagem</p>
+    <br>
+    <video src="videos/lago.mp4" width="500px" poster="img/Small.png" controls></video>
+    <br>
+    <p>O mesmo que acontece com o audio pode ser feito com o video em caso de incompatibilidade de extenção, crie a tag video sozinha e depois adicione o source com o video e sua extenção</p>
+    <br><br>
+    <h2>Videos externos</h2>
+    <p>videos do youtube basta clicar em compartilhar e selecionar o grame criado e colocar aqui</p>
+    <br>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/zjF7MnPSAHw?si=1nFXru2YOun_pOAr" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</body>
+</html>

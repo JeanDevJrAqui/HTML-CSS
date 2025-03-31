@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gerador de Petições - Cumprimento de Sentença</title>
+  <style>
+    
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f7f4;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 20px;
+      background-color: #fff;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #006400;
+      font-size: 26px;
+      margin-bottom: 20px;
+    }
+
+    h2 {
+      text-align: center;
+      color: #006400;
+      font-size: 22px;
+      margin-bottom: 18px;
+    }
+
+    p {
+      text-align: justify;
+      color: #000;
+      font-size: 16px;
+      margin-bottom: 30px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    label {
+      font-weight: bold;
+      margin-bottom: 5px;
+      color: #333;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    input[type="date"],
+    select {
+      padding: 8px;
+      font-size: 16px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .button-group {
+      display: flex;
+      align-items: center;
+      justify-content: center; /* Centraliza os botões */
+      gap: 10px; /* Adiciona espaço entre os botões */
+      width: 100%; /* Garante que o grupo ocupe toda a largura do contêiner */
+    }
+
+    button {
+      background-color: #006400;
+      color: #fff;
+      border: none;
+      padding: 10px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #004d32;
+    }
+
+    .button-group button + button {
+      margin-left: 10px;
+    }
+
+    h3 {
+      font-size: 18px;
+      color: #006400;
+      margin-top: 30px;
+    }
+
+    #editorPeticao .ql-editor {
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+      
+  </style>
+<script src="https://cdn.tiny.cloud/1/ldvsd8kgl3vfsq4j0o3q711dyn4u66bb1b6udb6iiom3g9an/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+</head>
+
+<body>
+  <div class="container">
+    <h1>Gerador de Petições</h1>
+    <h2>Cumprimento de Sentença - Honorários</h2>
+
+    <p>Esta é uma ferramenta experimental criada para auxiliar na elaboração de pedidos de cumprimento de sentença de honorários advocatícios fixados em favor da Defensoria Pública de Mato Grosso do Sul. Escolha a forma de fixação dos honorários (percentual sobre o valor da condenação, percentual sobre o valor do proveito econômico, percentual sobre o valor atualizado da causa, ou quantia certa) e insira os parâmetros no formulário para que a ferramenta gere a petição automaticamente.
+    
+    <form id="formulario">
+
+      <label for="numeroProcesso">Número do Processo:</label>
+      <input type="text" id="numeroProcesso" placeholder="_______-__.____.8.12.____" required 
+      maxlength="25"
+      oninput="formatarNumeroProcesso(this)">
+            
+      <label for="competenciaTerritorial">Comarca:</label>
+      <select id="competenciaTerritorial" required onchange="atualizarVaras()">
+
+        <!-- Entrância Especial -->
+        <optgroup label="Entrância Especial">
+          <option value="Campo Grande">Campo Grande</option>
+          <option value="Corumbá">Corumbá</option>
+          <option value="Dourados">Dourados</option>
+          <option value="Três Lagoas">Três Lagoas</option>
+        </optgroup>
+
+        <!-- Segunda Entrância -->
+        <optgroup label="Segunda Entrância">
+          <option value="Amambai">Amambai</option>
+          <option value="Anastácio">Anastácio</option>
+          <option value="Aparecida do Taboado">Aparecida do Taboado</option>
+          <option value="Aquidauana">Aquidauana</option>
+          <option value="Bataguassu">Bataguassu</option>
+          <option value="Bela Vista">Bela Vista</option>
+          <option value="Bonito">Bonito</option>
+          <option value="Caarapó">Caarapó</option>
+          <option value="Camapuã">Camapuã</option>
+          <option value="Cassilândia">Cassilândia</option>
+          <option value="Chapadão do Sul">Chapadão do Sul</option>
+          <option value="Costa Rica">Costa Rica</option>
+          <option value="Coxim">Coxim</option>
+          <option value="Fátima do Sul">Fátima do Sul</option>
+          <option value="Iguatemi">Iguatemi</option>
+          <option value="Ivinhema">Ivinhema</option>
+          <option value="Jardim">Jardim</option>
+          <option value="Maracaju">Maracaju</option>
+          <option value="Miranda">Miranda</option>
+          <option value="Naviraí">Naviraí</option>
+          <option value="Nova Alvorada do Sul">Nova Alvorada do Sul</option>
+          <option value="Nova Andradina">Nova Andradina</option>
+          <option value="Paranaíba">Paranaíba</option>
+          <option value="Ponta Porã">Ponta Porã</option>
+          <option value="Ribas do Rio Pardo">Ribas do Rio Pardo</option>
+          <option value="Rio Brilhante">Rio Brilhante</option>
+          <option value="Rio Verde de Mato Grosso">Rio Verde de Mato Grosso</option>
+          <option value="São Gabriel do Oeste">São Gabriel do Oeste</option>
+          <option value="Sidrolândia">Sidrolândia</option>          
+        </optgroup>
+
+        <!-- Primeira Entrância -->
+        <optgroup label="Primeira Entrância">
+          <option value="Água Clara">Água Clara</option>
+          <option value="Anaurilândia">Anaurilândia</option>
+          <option value="Angélica">Angélica</option>
+          <option value="Bandeirantes">Bandeirantes</option>
+          <option value="Batayporã">Batayporã</option>
+          <option value="Brasilândia">Brasilândia</option>
+          <option value="Coronel Sapucaia">Coronel Sapucaia</option>
+          <option value="Deodápolis">Deodápolis</option>
+          <option value="Dois Irmãos do Buriti">Dois Irmãos do Buriti</option>
+          <option value="Eldorado">Eldorado</option>
+          <option value="Glória de Dourados">Glória de Dourados</option>
+          <option value="Inocência">Inocência</option>
+          <option value="Itaquiraí">Itaquiraí</option>
+          <option value="Nioaque">Nioaque</option>
+          <option value="Pedro Gomes">Pedro Gomes</option>
+          <option value="Porto Murtinho">Porto Murtinho</option>
+          <option value="Rio Negro">Rio Negro</option>
+          <option value="Sete Quedas">Sete Quedas</option>
+          <option value="Sonora">Sonora</option>
+        </optgroup>
+      </select>
+      
+      <label for="competenciaMaterial">Vara:</label>
+      <select id="competenciaMaterial" required>
+        <option value="">Selecione uma comarca primeiro</option>
+      </select>
+      
+      <label for="nomeParteExecutada">Nome da parte executada:</label>
+      <input type="text" id="nomeParteExecutada" oninput="this.value = this.value.toUpperCase()" required>
+
+      <label for="valorFixado">Valor fixado pelo juízo:</label>
+      <input type="text" id="valorFixado" oninput="formatarValorReais(this)" required>
+
+      <label for="indiceCorrecao">Índice de correção monetária:</label>
+      <select id="indiceCorrecao">
+        <option value="igpm">IGPM</option>
+        <option value="ipca">IPCA</option>
+        <option value="selic">Selic</option>
+      </select>
+
+      <label for="dataDecisao">Data da decisão:</label>
+      <input type="date" id="dataDecisao" required>
+
+      <label for="jurosMora">Percentual dos juros de mora:</label>
+      <input type="text" id="jurosMora" oninput="formatarJuros(this)" required>
+
+      <label for="dataTransito">Data do trânsito em julgado:</label>
+      <input type="date" id="dataTransito" required>
+
+      <div class="button-group">
+        <button type="button" onclick="gerarPeticao()">Gerar Petição</button>
+        <button type="button" onclick="copiarTexto()">Copiar Texto</button>
+        <button type="button" onclick="exportarParaWordOnline()">Copiar e abrir Word</button>
+      </div>
+    </form>
+
+    <h3>Petição Gerada:</h3>
+    <div id="editorPeticao"></div>
+  </div>
+
+  <script>
+    // Verifica a comarca selecionada e exibe as varas de acordo com a matéria
+    function atualizarVaras() {
+      const comarcaSelecionada = document.getElementById("competenciaTerritorial").value;
+      const competenciaMaterial = document.getElementById("competenciaMaterial");
+
+      // Limpa as opções anteriores
+      competenciaMaterial.innerHTML = "";
+
+      // Definindo comarcas de Primeira Entrância para uso geral
+      const comarcasPrimeiraEntrancia = [
+        "Água Clara", "Anaurilândia", "Angélica", "Bandeirantes", "Batayporã",
+        "Brasilândia", "Coronel Sapucaia", "Deodápolis", "Dois Irmãos do Buriti",
+        "Eldorado", "Glória de Dourados", "Inocência", "Itaquiraí", "Nioaque",
+        "Pedro Gomes", "Porto Murtinho", "Rio Negro", "Sete Quedas", "Sonora"
+      ];
+
+      if (comarcaSelecionada === "Campo Grande") {
+        // Adiciona as opções para Campo Grande
+        competenciaMaterial.innerHTML = `
+          <optgroup label="Varas de Fazenda Pública e Registros Públicos">
+            <option value="1ª Vara de Fazenda Pública e Registros Públicos">1ª Vara de Fazenda Pública e Registros Públicos</option>
+            <option value="2ª Vara de Fazenda Pública e Registros Públicos">2ª Vara de Fazenda Pública e Registros Públicos</option>
+            <option value="3ª Vara de Fazenda Pública e Registros Públicos">3ª Vara de Fazenda Pública e Registros Públicos</option>
+            <option value="4ª Vara de Fazenda Pública e Registros Públicos">4ª Vara de Fazenda Pública e Registros Públicos</option>
+          </optgroup>
+          <optgroup label="Varas de Direitos Difusos, Coletivos e Individuais Homogêneos">
+            <option value="1ª Vara de Direitos Difusos, Coletivos e Individuais Homogêneos">1ª Vara de Direitos Difusos, Coletivos e Individuais Homogêneos</option>
+            <option value="2ª Vara de Direitos Difusos, Coletivos e Individuais Homogêneos">2ª Vara de Direitos Difusos, Coletivos e Individuais Homogêneos</option>
+          </optgroup>
+          <optgroup label="Varas de Família e Sucessões">
+            <option value="1ª Vara de Família e Sucessões">1ª Vara de Família e Sucessões</option>
+            <option value="2ª Vara de Família e Sucessões">2ª Vara de Família e Sucessões</option>
+            <option value="3ª Vara de Família e Sucessões">3ª Vara de Família e Sucessões</option>
+            <option value="4ª Vara de Família e Sucessões">4ª Vara de Família e Sucessões</option>
+            <option value="5ª Vara de Família e Sucessões">5ª Vara de Família e Sucessões</option>
+            <option value="6ª Vara de Família e Sucessões">6ª Vara de Família e Sucessões</option>
+          </optgroup>
+          <optgroup label="Varas Cíveis de Competência Residual">
+            <option value="1ª Vara Cível de Competência Residual">1ª Vara Cível de Competência Residual</option>
+            <option value="2ª Vara Cível de Competência Residual">2ª Vara Cível de Competência Residual</option>
+            <option value="3ª Vara Cível de Competência Residual">3ª Vara Cível de Competência Residual</option>
+            <option value="4ª Vara Cível de Competência Residual">4ª Vara Cível de Competência Residual</option>
+            <option value="5ª Vara Cível de Competência Residual">5ª Vara Cível de Competência Residual</option>
+            <option value="6ª Vara Cível de Competência Residual">6ª Vara Cível de Competência Residual</option>
+            <option value="7ª Vara Cível de Competência Residual">7ª Vara Cível de Competência Residual</option>
+            <option value="8ª Vara Cível de Competência Residual">8ª Vara Cível de Competência Residual</option>
+            <option value="9ª Vara Cível de Competência Residual">9ª Vara Cível de Competência Residual</option>
+            <option value="10ª Vara Cível de Competência Residual">10ª Vara Cível de Competência Residual</option>
+            <option value="11ª Vara Cível de Competência Residual">11ª Vara Cível de Competência Residual</option>
+            <option value="12ª Vara Cível de Competência Residual">12ª Vara Cível de Competência Residual</option>
+            <option value="13ª Vara Cível de Competência Residual">13ª Vara Cível de Competência Residual</option>
+            <option value="14ª Vara Cível de Competência Residual">14ª Vara Cível de Competência Residual</option>
+            <option value="15ª Vara Cível de Competência Residual">15ª Vara Cível de Competência Residual</option>
+            <option value="16ª Vara Cível de Competência Residual">16ª Vara Cível de Competência Residual</option>          
+            <option value="1ª Vara Bancária">1ª Vara Bancária</option>
+            <option value="2ª Vara Bancária">2ª Vara Bancária</option>
+            <option value="1ª Vara de Execução de Título Extrajudicial, Embargos e demais Incidentes">1ª Vara de Execução de Título Extrajudicial, Embargos e demais Incidentes</option>
+            <option value="2ª Vara de Execução de Título Extrajudicial, Embargos e demais Incidentes">2ª Vara de Execução de Título Extrajudicial, Embargos e demais Incidentes</option>
+          </optgroup>
+          <optgroup label="Varas do Tribunal do Júri">
+            <option value="1ª Vara do Tribunal do Júri">1ª Vara do Tribunal do Júri</option>
+            <option value="2ª Vara do Tribunal do Júri">2ª Vara do Tribunal do Júri</option>
+          </optgroup>
+          <optgroup label="Varas da Infância, Adolescência e do Idoso">
+            <option value="Vara da Infância, da Adolescência e do Idoso (Cível)">Vara da Infância, da Adolescência e do Idoso (Cível)</option>
+            <option value="Vara da Infância e da Adolescência (Infracional)">Vara da Infância e da Adolescência (Infracional)</option>
+          </optgroup>
+          <optgroup label="Varas Criminais">
+            <option value="1ª Vara Criminal Residual">1ª Vara Criminal Residual</option>
+            <option value="2ª Vara Criminal Residual">2ª Vara Criminal Residual</option>
+            <option value="3ª Vara Criminal Residual">3ª Vara Criminal Residual</option>
+            <option value="4ª Vara Criminal Residual">4ª Vara Criminal Residual</option>
+            <option value="5ª Vara Criminal Residual">5ª Vara Criminal Residual</option>
+            <option value="6ª Vara Criminal Residual">6ª Vara Criminal Residual</option>
+            <option value="7ª Vara Criminal de Competência Especial">7ª Vara Criminal de Competência Especial</option>
+          </optgroup>
+          <optgroup label="Varas de Violência Doméstica e Familiar contra a Mulher">
+            <option value="1ª Vara da Violência Doméstica e Familiar contra a Mulher">1ª Vara da Violência Doméstica e Familiar contra a Mulher</option>
+            <option value="2ª Vara da Violência Doméstica e Familiar contra a Mulher">2ª Vara da Violência Doméstica e Familiar contra a Mulher</option>
+            <option value="3ª Vara da Violência Doméstica e Familiar contra a Mulher">3ª Vara da Violência Doméstica e Familiar contra a Mulher</option>
+          </optgroup>
+          <optgroup label="Varas de Execução Penal">
+            <option value="1ª Vara de Execução Penal">1ª Vara de Execução Penal</option>
+            <option value="2ª Vara de Execução Penal">2ª Vara de Execução Penal</option>
+          </optgroup>
+          <optgroup label="Juizados Especiais Centrais">
+            <option value="1ª Vara do Juizado Especial Central">1ª Vara do Juizado Especial Central</option>
+            <option value="2ª Vara do Juizado Especial Central">2ª Vara do Juizado Especial Central</option>
+            <option value="3ª Vara do Juizado Especial Central">3ª Vara do Juizado Especial Central</option>
+            <option value="4ª Vara do Juizado Especial Central (Fazenda Pública)">4ª Vara do Juizado Especial Central (Fazenda Pública)</option>
+            <option value="5ª Vara do Juizado Especial Central">5ª Vara do Juizado Especial Central</option>
+            <option value="6ª Vara do Juizado Especial Central (Fazenda Pública)">6ª Vara do Juizado Especial Central (Fazenda Pública)</option>
+            <option value="7ª Vara do Juizado Especial Central">7ª Vara do Juizado Especial Central</option>
+            <option value="10ª Vara do Juizado Especial Central">10ª Vara do Juizado Especial Central</option>
+            <option value="11ª Vara do Juizado Especial Central">11ª Vara do Juizado Especial Central</option>
+          </optgroup>
+          <optgroup label="Demais">                   
+          <option value="Vara da Justiça Militar Estadual">Vara da Justiça Militar Estadual</option>
+          <option value="Vara de Falências, Recuperações, Insolvências e Cumprimento de Cartas Precatórias Cíveis em Geral">Vara de Falências, Recuperações, Insolvências e Cumprimento de Cartas Precatórias Cíveis em Geral</option>
+          </optgroup>
+        `;
+      } else if (comarcaSelecionada === "Dourados") {
+        // Adiciona as opções para Dourados
+        competenciaMaterial.innerHTML = `
+          <optgroup label="Varas Cíveis">
+            <option value="1ª Vara Cível">1ª Vara Cível</option>
+            <option value="2ª Vara Cível">2ª Vara Cível</option>
+            <option value="3ª Vara Cível">3ª Vara Cível</option>
+            <option value="4ª Vara Cível">4ª Vara Cível</option>
+            <option value="5ª Vara Cível">5ª Vara Cível</option>
+            <option value="6ª Vara Cível">6ª Vara Cível</option>
+            <option value="7ª Vara Cível">7ª Vara Cível</option>
+            <option value="8ª Vara Cível">8ª Vara Cível</option>
+          </optgroup>
+          <optgroup label="Varas Criminais">
+            <option value="1ª Vara Criminal">1ª Vara Criminal</option>
+            <option value="2ª Vara Criminal">2ª Vara Criminal</option>
+            <option value="3ª Vara Criminal">3ª Vara Criminal</option>
+            <option value="4ª Vara Criminal">4ª Vara Criminal</option>
+          </optgroup>
+          <optgroup label="Varas de Família e Sucessões">
+            <option value="1ª Vara de Família e Sucessões">1ª Vara de Família e Sucessões</option>
+            <option value="2ª Vara de Família e Sucessões">2ª Vara de Família e Sucessões</option>
+          </optgroup>
+          <optgroup label="Juizados Especiais">
+            <option value="1ª Vara do Juizado Especial Cível e Criminal">1ª Vara do Juizado Especial Cível e Criminal</option>
+            <option value="2ª Vara do Juizado Especial Cível e Criminal">2ª Vara do Juizado Especial Cível e Criminal</option>
+          </optgroup>
+          <optgroup label="Demais">
+            <option value="Vara da Infância e da Juventude">Vara da Infância e da Juventude</option>
+          </optgroup>
+        `;
+      } else if (comarcaSelecionada === "Corumbá") {
+        // Adiciona as opções para Corumbá
+        competenciaMaterial.innerHTML = `
+          <optgroup label="Varas Cíveis">
+            <option value="1ª Vara Cível">1ª Vara Cível</option>
+            <option value="2ª Vara Cível">2ª Vara Cível</option>
+            <option value="3ª Vara Cível">3ª Vara Cível</option>
+          </optgroup>
+          <optgroup label="Varas Criminais">
+            <option value="1ª Vara Criminal">1ª Vara Criminal</option>
+            <option value="2ª Vara Criminal">2ª Vara Criminal</option>
+          </optgroup>
+          <optgroup label="Demais">
+            <option value="Vara de Fazenda Pública e Registros Públicos">Vara de Fazenda Pública e Registros Públicos</option>
+            <option value="Juizado Especial Cível e Criminal">Juizado Especial Cível e Criminal</option>
+          </optgroup>
+        `;
+      } else if (comarcaSelecionada === "Três Lagoas") {
+        // Adiciona as opções para Três Lagoas
+        competenciaMaterial.innerHTML = `
+          <optgroup label="Varas Cíveis">
+            <option value="1ª Vara Cível">1ª Vara Cível</option>
+            <option value="2ª Vara Cível">2ª Vara Cível</option>
+            <option value="3ª Vara Cível e Regional de Falências e Recuperações">3ª Vara Cível e Regional de Falências e Recuperações</option>
+            <option value="4ª Vara Cível">4ª Vara Cível</option>
+          </optgroup>
+          <optgroup label="Varas Criminais">
+            <option value="1ª Vara Criminal">1ª Vara Criminal</option>
+            <option value="2ª Vara Criminal">2ª Vara Criminal</option>
+            <option value="3ª Vara Criminal">3ª Vara Criminal</option>
+          </optgroup>
+          <optgroup label="Demais">
+            <option value="Vara da Infância, Juventude e Violência Doméstica e Familiar">Vara da Infância, Juventude e Violência Doméstica e Familiar</option>
+            <option value="Juizado Especial Cível e Criminal">Juizado Especial Cível e Criminal</option>
+          </optgroup>
+        `;
+      } else if (["Amambai", "Anastácio", "Aparecida do Taboado", "Aquidauana", "Bataguassu", "Bela Vista", "Bonito", "Caarapó", "Camapuã", "Cassilândia", "Chapadão do Sul", "Costa Rica", "Coxim", "Fátima do Sul", "Iguatemi", "Ivinhema", "Jardim", "Maracaju", "Miranda", "Naviraí", "Nova Alvorada do Sul", "Nova Andradina", "Paranaíba", "Ponta Porã", "Ribas do Rio Pardo", "Rio Brilhante", "Rio Verde de Mato Grosso", "São Gabriel do Oeste", "Sidrolândia"].includes(comarcaSelecionada)) {
+        // Adiciona opções genéricas para comarcas de segunda entrância
+        const opcoesSegundaEntrancia = {
+          "Amambai": ["1ª Vara", "2ª Vara", "Juizado Especial Adjunto"],
+          "Anastácio": ["Vara Única", "Juizado Especial Adjunto"],
+          "Aparecida do Taboado": ["1ª Vara", "2ª Vara", "Juizado Especial Adjunto"],
+          "Aquidauana": ["1ª Vara Cível", "2ª Vara Cível", "Vara Criminal", "Juizado Especial Adjunto"],
+          "Bataguassu": ["1ª Vara", "2ª Vara", "Juizado Especial Adjunto"],
+          "Bela Vista": ["1ª Vara", "2ª Vara", "Juizado Especial Adjunto"],
+          "Bonito": ["1ª Vara", "2ª Vara", "Juizado Especial Adjunto"],
+          "Caarapó": ["1ª Vara", "2ª Vara", "Juizado Especial Adjunto"],
+          "Camapuã": ["1ª Vara", "2ª Vara", "Juizado Especial Adjunto"],
+          "Cassilândia": ["1ª Vara", "2ª Vara", "Juizado Especial Adjunto"],
+          "Chapadão do Sul": ["1ª Vara", "2ª Vara", "Juizado Especial Adjunto"],
+          "Costa Rica": ["1ª Vara", "2ª Vara", "Juizado Especial Adjunto"],
+          "Coxim": ["1ª Vara", "2ª Vara", "Juizado Especial Adjunto"],
+          "Fátima do Sul": ["1ª Vara", "2ª Vara", "Juizado Especial Adjunto"],
+          "Iguatemi": ["Vara Única", "Juizado Especial Adjunto"],
+          "Ivinhema": ["1ª Vara", "2ª Vara", "Juizado Especial Adjunto"],
+          "Jardim": ["1ª Vara", "2ª Vara", "Juizado Especial Adjunto"],
+          "Maracaju": ["1ª Vara", "2ª Vara", "Juizado Especial Adjunto"],
+          "Miranda": ["1ª Vara", "2ª Vara", "Juizado Especial Adjunto"],
+          "Naviraí": ["1ª Vara", "2ª Vara", "Juizado Especial Adjunto"],
+          "Nova Alvorada do Sul": ["Vara Única", "Juizado Especial Adjunto"],
+          "Nova Andradina": ["1ª Vara", "2ª Vara", "3ª Vara", "Juizado Especial Adjunto"],
+          "Paranaíba": ["1ª Vara", "2ª Vara", "3ª Vara", "Juizado Especial Adjunto"],
+          "Ponta Porã": ["1ª Vara Cível", "2ª Vara Cível", "3ª Vara Cível", "1ª Vara Criminal", "2ª Vara Criminal", "Juizado Especial Adjunto"],
+          "Ribas do Rio Pardo": ["Vara Única", "Juizado Especial Adjunto"],
+          "Rio Brilhante": ["1ª Vara", "2ª Vara", "Juizado Especial Adjunto"],
+          "Rio Verde de Mato Grosso": ["Vara Única", "Juizado Especial Adjunto"],
+          "São Gabriel do Oeste": ["1ª Vara", "2ª Vara", "Juizado Especial Adjunto"],
+          "Sidrolândia": ["1ª Vara", "2ª Vara", "Juizado Especial Adjunto"],
+        };
+
+        const opcoes = opcoesSegundaEntrancia[comarcaSelecionada];
+        opcoes.forEach(vara => {
+          competenciaMaterial.innerHTML += `<option value="${vara}">${vara}</option>`;
+        });
+      } else if (comarcasPrimeiraEntrancia.includes(comarcaSelecionada)) {
+          const opcoes = ["Vara Única", "Juizado Especial Adjunto"];
+          opcoes.forEach(vara => {
+            competenciaMaterial.innerHTML += `<option value="${vara}">${vara}</option>`;
+          });                  
+      } else {
+      // Exibe uma opção padrão se a comarca não for reconhecida
+      competenciaMaterial.innerHTML = '<option value="">Selecione uma comarca primeiro</option>';
+      }
+    }
+    
+    // Chama automaticamente ao carregar a página para mostrar opções se já houver uma seleção inicial
+    document.addEventListener("DOMContentLoaded", function () {
+    atualizarVaras();
+    });
+
+    function formatarValorReais(element) {
+      let valor = element.value.replace(/\D/g, ""); 
+      valor = (valor / 100).toFixed(2) + ""; 
+      valor = valor.replace(".", ","); 
+      element.value = "R$ " + valor; 
+    }
+
+    function formatarJuros(element) {
+      let valor = element.value.replace(/[^\d.]/g, ""); // Permite apenas números e ponto decimal
+      if (valor.includes(".")) {
+        let partes = valor.split(".");
+        partes[0] = partes[0].slice(0, 2); // Limita a duas casas antes do ponto
+        partes[1] = partes[1].slice(0, 2); // Limita a duas casas após o ponto
+        valor = partes.join(".");
+      } else {
+        valor = valor.slice(0, 2); // Limita a duas casas se for número inteiro
+      }
+      element.value = valor + "%"; // Adiciona o símbolo de %
+    }
+
+    function getLocalDate(dateString) {
+      const [year, month, day] = dateString.split('-');
+      return new Date(year, month - 1, day);
+    }
+
+    function formatarDataPorExtenso(data) {
+      const meses = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"];
+      const dia = data.getDate();
+      const mes = meses[data.getMonth()];
+      const ano = data.getFullYear();
+      return `${dia} de ${mes} de ${ano}`;
+    }
+
+    async function obterIndiceCorrecao(indice) {
+      let url = "";
+
+      if (indice === "selic") {
+        url = "https://api.bcb.gov.br/dados/serie/bcdata.sgs.11/dados/ultimos/1?formato=json";
+      } else if (indice === "igpm") {
+        url = "https://api.bcb.gov.br/dados/serie/bcdata.sgs.189/dados/ultimos/1?formato=json";
+      } else if (indice === "ipca") {
+        url = "https://api.bcb.gov.br/dados/serie/bcdata.sgs.433/dados/ultimos/1?formato=json";
+      }
+
+      try {
+        const response = await fetch(url);
+        const data = await response.json();
+        return parseFloat(data[0].valor);
+      } catch (error) {
+        console.error(`Erro ao buscar o índice ${indice}:`, error);
+        return null;
+      }
+    }
+
+    function valorPorExtenso(valor) {
+      const formatter = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
+      return formatter.format(valor) + ` (${numeroPorExtenso(valor)})`;
+    }
+
+    function numeroPorExtenso(valor) {
+      const unidades = ["", "um", "dois", "três", "quatro", "cinco", "seis", "sete", "oito", "nove"];
+      const especiais = ["dez", "onze", "doze", "treze", "quatorze", "quinze", "dezesseis", "dezessete", "dezoito", "dezenove"];
+      const dezenas = ["", "", "vinte", "trinta", "quarenta", "cinquenta", "sessenta", "setenta", "oitenta", "noventa"];
+      const centenas = ["", "cento", "duzentos", "trezentos", "quatrocentos", "quinhentos", "seiscentos", "setecentos", "oitocentos", "novecentos"];
+
+      if (valor === 100) return "cem reais";
+
+      const reais = Math.floor(valor);
+      const centavos = Math.round((valor - reais) * 100);
+      let texto = "";
+
+      if (reais >= 1000) {
+        texto += unidades[Math.floor(reais / 1000)] + " mil ";
+      }
+      if ((reais % 1000) >= 100) {
+        texto += centenas[Math.floor((reais % 1000) / 100)] + " e ";
+      }
+
+      const dezena = Math.floor((reais % 100) / 10);
+      const unidade = reais % 10;
+
+      if (dezena === 1 && unidade > 0) {
+        texto += especiais[unidade];
+      } else {
+        if (dezena > 1) {
+          texto += dezenas[dezena];
+          if (unidade > 0) texto += " e " + unidades[unidade];
+        } else if (unidade > 0) {
+          texto += unidades[unidade];
+        }
+      }
+
+      texto += " reais";
+
+      if (centavos > 0) {
+        if (centavos === 1) {
+          texto += " e um centavo";
+        } else if (centavos < 10) {
+          texto += ` e ${unidades[centavos]} centavos`;
+        } else if (centavos < 20) {
+          texto += ` e ${especiais[centavos - 10]} centavos`;
+        } else {
+          texto += ` e ${dezenas[Math.floor(centavos / 10)]}`;
+          if (centavos % 10 > 0) texto += " e " + unidades[centavos % 10];
+          texto += " centavos";
+        }
+      }
+
+      return texto;
+    }
+
+    // Função para formatar automaticamente o campo de número do processo
+    function formatarNumeroProcesso(element) {
+      let valor = element.value.replace(/\D/g, ''); // Remove caracteres não numéricos
+      if (valor.length > 7) valor = valor.slice(0, 7) + '-' + valor.slice(7); // Adiciona o hífen após os primeiros 7 dígitos
+      if (valor.length > 10) valor = valor.slice(0, 10) + '.' + valor.slice(10); // Adiciona o ponto após os próximos 2 dígitos
+      if (valor.length > 15) valor = valor.slice(0, 15) + '.' + valor.slice(15); // Adiciona o ponto após os próximos 4 dígitos
+      if (valor.length > 17) valor = valor.slice(0, 17) + '.' + valor.slice(17); // Adiciona o ponto após o próximo dígito
+      if (valor.length > 20) valor = valor.slice(0, 20) + '.' + valor.slice(20); // Adiciona o ponto após os próximos 2 dígitos
+      if (valor.length > 25) valor = valor.slice(0, 25); // Limita a 25 caracteres
+      element.value = valor; // Atualiza o valor do campo com a formatação
+    }
+
+    // 3. Inicializa o editor TinyMCE
+    tinymce.init({
+      selector: '#editorPeticao',
+      plugins: ['lists indent2em','anchor', 'autolink', 'charmap', 'codesample', 'emoticons', 'image', 'link', 'lists', 'media', 'searchreplace', 'table', 'visualblocks', 'wordcount', 'importword', 'exportword', 'exportpdf'],
+      toolbar: 'undo redo | bold italic underline | alignleft aligncenter alignright alignjustify',
+      menubar: false,
+      fontsize_formats: "10pt 12pt",
+      font_formats: 'Arial=arial,helvetica,sans-serif;',
+      height: 700, // Altura inicial     
+      content_style: `
+        body { 
+          font-family: Arial, sans-serif; 
+          font-size: 12pt; 
+          margin: 0; 
+        } 
+        p { 
+          margin: 0; 
+          padding: 0; 
+        }`,
+        setup: function (editor) {
+          editor.on('init', function () {
+          editor.setContent('<p>Aqui será gerado o texto da petição.</p>');
+        });
+      },
+    });
+
+    // 4. Defina a função gerarPetição
+    async function gerarPeticao() {
+      const numeroProcesso = document.getElementById("numeroProcesso").value;
+      const varaSelecionada = document.getElementById('competenciaMaterial').value;
+      const comarcaSelecionada = document.getElementById('competenciaTerritorial').value;
+      const nomeParteExecutada = document.getElementById('nomeParteExecutada').value;
+      const valorFixado = parseFloat(document.getElementById('valorFixado').value.replace("R$ ", "").replace(",", "."));
+      const indiceCorrecao = document.getElementById('indiceCorrecao').value;
+      const dataDecisao = getLocalDate(document.getElementById('dataDecisao').value);
+      const jurosMora = parseFloat(document.getElementById('jurosMora').value);
+      const dataTransito = getLocalDate(document.getElementById('dataTransito').value);
+      let percentualCorrecao = await obterIndiceCorrecao(indiceCorrecao);     
+
+      // Exibe mensagem de erro no editor, se necessário
+      if (percentualCorrecao === null) {
+        tinymce.get('editorPeticao').setContent(`Erro ao buscar o índice ${indiceCorrecao.toUpperCase()}. Tente novamente.`);
+      return;
+      }
+
+      const dataAtual = new Date();
+      const dataAtualPorExtenso = formatarDataPorExtenso(dataAtual);
+
+      // Correção Monetária Acumulada - aplicação mensal
+      const mesesCorrecao = (dataAtual.getFullYear() - dataDecisao.getFullYear()) * 12 + (dataAtual.getMonth() - dataDecisao.getMonth());
+      const correcaoAcumulada = valorFixado * Math.pow((1 + percentualCorrecao / 100), mesesCorrecao) - valorFixado;
+
+      // Juros de Mora Acumulado - aplicação anual (juros compostos)
+      const anosJuros = dataAtual.getFullYear() - dataTransito.getFullYear();
+      const jurosAcumuladoComp = valorFixado * Math.pow((1 + jurosMora / 100), anosJuros) - valorFixado;
+
+      // Valor Final - somatório de valor fixado, correção monetária e juros compostos
+      const valorFinal = valorFixado + correcaoAcumulada + jurosAcumuladoComp;
+
+      // 4.1. Gera o texto da petição com base nos dados
+      const textoPeticao = `      
+        <p style="font-family: Arial; font-size: 12pt; color: #000000; font-weight: bold; text-align: justify; line-height: 18pt; margin: 0; padding: 0;">
+          AO JUÍZO DA ${varaSelecionada.toUpperCase()} DA COMARCA DE ${comarcaSelecionada.toUpperCase()}, ESTADO DE MATO GROSSO DO SUL
+        </p>
+        <p style="font-family: Arial; font-size: 12pt; color: #000000; text-align: justify; line-height: 18pt; margin: 0; padding: 0;">&nbsp;</p>
+        <p style="font-family: Arial; font-size: 12pt; color: #000000; text-align: justify; line-height: 18pt; margin: 0; padding: 0;">&nbsp;</p>
+        <p style="font-family: Arial; font-size: 12pt; color: #000000; text-align: justify; line-height: 18pt; margin: 0; padding: 0;">&nbsp;</p>
+        <p style="font-family: Arial; font-size: 12pt; color: #000000; text-align: justify; line-height: 18pt; margin: 0; padding: 0;">
+          Processo n. ${numeroProcesso}
+        </p>
+        <p style="font-family: Arial; font-size: 12pt; color: #000000; text-align: justify; line-height: 18pt; margin: 0; padding: 0;">&nbsp;</p>
+        <p style="font-family: Arial; font-size: 12pt; color: #000000; text-align: justify; line-height: 18pt; margin: 0; padding: 0;">&nbsp;</p>
+        <p style="font-family: Arial; font-size: 12pt; color: #000000; text-align: justify; line-height: 18pt; margin: 0; padding: 0;">
+          A DEFENSORIA PÚBLICA DO ESTADO DE MATO GROSSO DO SUL, inscrita no CNPJ sob n.º 03.236.066/0001-73, com sede administrativa no Parque dos Poderes, Av. Des. José Nunes da Cunha, bloco IV, s/n, CEP: 79.031-310, em Campo Grande – MS, vem à presença de Vossa Excelência, na pessoa da Defensora Pública signatária, respeitosamente, requerer o
+        </p>
+        <p style="font-family: Arial; font-size: 12pt; color: #000000; text-align: justify; line-height: 18pt; margin: 0; padding: 0;">&nbsp;</p>
+        <p style="font-family: Arial; font-size: 12pt; color: #000000; font-weight: bold; text-align: center; line-height: 18pt; margin: 0; padding: 0;">
+          CUMPRIMENTO DE SENTENÇA<br>(honorários advocatícios)
+        </p>
+        <p style="font-family: Arial; font-size: 12pt; color: #000000; text-align: justify; line-height: 18pt; margin: 0; padding: 0;">&nbsp;</p>
+        <p style="font-family: Arial; font-size: 12pt; color: #000000; text-align: justify; line-height: 18pt; margin: 0; padding: 0;">
+          em desfavor de ${nomeParteExecutada}, parte já qualificada, com fundamento no art. 523 do CPC e pelas razões de fato e de direito a seguir expostas:
+        </p>
+        <p style="font-family: Arial; font-size: 12pt; color: #000000; text-align: justify; line-height: 18pt; margin: 0; padding: 0;">&nbsp;</p>
+        <p style="font-family: Arial; font-size: 12pt; color: #000000; font-weight: bold; text-align: justify; line-height: 18pt; margin: 0; padding: 0;">
+          I – DAS RAZÕES DE FATO E DE DIREITO
+        </p>
+        <p style="font-family: Arial; font-size: 12pt; color: #000000; text-align: justify; line-height: 18pt; margin: 0; padding: 0;">&nbsp;</p>
+        <p style="font-family: Arial; font-size: 12pt; color: #000000; text-align: justify; line-height: 18pt; margin: 0; padding: 0;">
+          A sentença condenou a parte executada ao pagamento das custas e despesas processuais, bem como dos honorários advocatícios, estes fixados em ${valorPorExtenso(valorFixado)}.
+        </p>
+        <p style="font-family: Arial; font-size: 12pt; color: #000000; text-align: justify; line-height: 18pt; margin: 0; padding: 0;">&nbsp;</p>
+        <p style="font-family: Arial; font-size: 12pt; color: #000000; text-align: justify; line-height: 18pt; margin: 0; padding: 0;">
+          Dispõe o art. 523 do CPC:
+        </p>
+        <p style="font-family: Arial; font-size: 12pt; color: #000000; text-align: justify; line-height: 18pt; margin: 0; padding: 0;">&nbsp;</p>
+        <div style="font-family: Arial; font-size: 10pt; color: #000000; text-align: justify; line-height: 12pt;">
+          <p style="margin: 0; padding: 0; margin-left: 2cm;">Art. 523. No caso de condenação em quantia certa, ou já fixada em liquidação, e no caso de decisão sobre parcela incontroversa, o cumprimento definitivo da sentença far-se-á a requerimento do exequente, sendo o executado intimado para pagar o débito, no prazo de 15 (quinze) dias, acrescido de custas, se houver.</p>
+          <p style="margin: 0; padding: 0; margin-left: 2cm;">§ 1º Não ocorrendo pagamento voluntário no prazo do caput, o débito será acrescido de multa de dez por cento e, também, de honorários de advogado de dez por cento.</p>
+          <p style="margin: 0; padding: 0; margin-left: 2cm;">§ 2º Efetuado o pagamento parcial no prazo previsto no caput, a multa e os honorários previstos no § 1º incidirão sobre o restante.</p>
+          <p style="margin: 0; padding: 0; margin-left: 2cm;">§ 3º Não efetuado tempestivamente o pagamento voluntário, será expedido, desde logo, mandado de penhora e avaliação, seguindo-se os atos de expropriação.</p>
+        </div>
+        <p style="font-family: Arial; font-size: 12pt; color: #000000; text-align: justify; line-height: 18pt; margin: 0; padding: 0;">&nbsp;</p>
+        <p style="font-family: Arial; font-size: 12pt; color: #000000; text-align: justify; line-height: 18pt; margin: 0; padding: 0;">
+          Fixada a obrigação em sentença, e não satisfeita, cabe ao credor, munido do título executivo, dar início à fase de cumprimento de sentença para dar efetividade do pronunciamento jurisdicional, que reconheceu a certeza, exigibilidade e liquidez da obrigação.
+        </p>
+        <p style="font-family: Arial; font-size: 12pt; color: #000000; text-align: justify; line-height: 18pt; margin: 0; padding: 0;">&nbsp;</p>
+        <p style="font-family: Arial; font-size: 12pt; color: #000000; text-align: justify; line-height: 18pt; margin: 0; padding: 0;">
+          Consoante entendimento pacífico do Superior Tribunal de Justiça, quando os honorários são fixados em quantia certa, é legítima a incidência de correção monetária, computada a partir da data em que fixada a verba (AgInt nos EDcl no AREsp 1553027/RJ, Rel. Ministro MARCO BUZZI, QUARTA TURMA, julgado em 30/03/2020, DJe 01/04/2020).
+        </p>
+        <p style="font-family: Arial; font-size: 12pt; color: #000000; text-align: justify; line-height: 18pt; margin: 0; padding: 0;">&nbsp;</p>
+        <p style="font-family: Arial; font-size: 12pt; color: #000000; text-align: justify; line-height: 18pt; margin: 0; padding: 0;">
+          Noutro lado, os juros de mora incidem a partir da data do trânsito em julgado da decisão em que forem arbitrados (art. 85, § 16, do CPC). Trata-se de positivação da jurisprudência do Superior Tribunal de Justiça, que se firmou no sentido de que é legítima a inclusão de juros de mora na condenação em honorários, ainda que não solicitado na inicial ou não previsto na sentença, fixando como o termo inicial da sua incidência a mora que sobrevém com o trânsito em julgado da decisão (REsp n. 771029/MG, Min. MAURO CAMPBELL MARQUES, DJe 09/11/2009).
+        </p>
+        <p style="font-family: Arial; font-size: 12pt; color: #000000; text-align: justify; line-height: 18pt; margin: 0; padding: 0;">&nbsp;</p>
+        <p style="font-family: Arial; font-size: 12pt; color: #000000; text-align: justify; line-height: 18pt; margin: 0; padding: 0;">
+          A presente petição satisfaz os requisitos esculpidos no art. 524 do CPC e está em consonância com o título executivo judicial, pois para elaboração da planilha de cálculo anexa foi utilizado como base o montante de ${valorPorExtenso(valorFixado)}, com incidência de correção monetária pelo índice ${indiceCorrecao.toUpperCase()} a partir da data do arbitramento (${dataDecisao.toLocaleDateString('pt-BR')}) e juros de mora de ${jurosMora}% ao mês, a contar da data do trânsito em julgado (${dataTransito.toLocaleDateString('pt-BR')}), resultando no valor total de ${valorPorExtenso(valorFinal)}.
+        </p>
+        <p style="font-family: Arial; font-size: 12pt; color: #000000; text-align: justify; line-height: 18pt; margin: 0; padding: 0;">&nbsp;</p>
+        <p style="font-family: Arial; font-size: 12pt; color: #000000; font-weight: bold; text-align: justify; line-height: 18pt; margin: 0; padding: 0;">
+          II – DO PEDIDO E DOS REQUERIMENTOS:
+        </p>
+        <p style="font-family: Arial; font-size: 12pt; color: #000000; text-align: justify; line-height: 18pt; margin: 0; padding: 0;">&nbsp;</p>
+        <p style="font-family: Arial; font-size: 12pt; color: #000000; text-align: justify; line-height: 18pt; margin: 0; padding: 0;">
+          Diante do exposto, pede e requer:
+        </p>
+        <p style="font-family: Arial; font-size: 12pt; color: #000000; text-align: justify; line-height: 18pt; margin: 0; padding: 0;">&nbsp;</p>
+        <p style="font-family: Arial; font-size: 12pt; color: #000000; text-align: justify; line-height: 18pt; margin: 0; padding: 0;">
+          a) a intimação da parte executada, na pessoa de seu advogado, para o fim de efetuar o pagamento do valor de ${valorPorExtenso(valorFinal)}, no prazo de 15 (quinze) dias, sob pena de acréscimo de multa e honorários advocatícios, cada qual no importe de 10%, nos termos do art. 523, § 1º do CPC;
+        </p>
+        <p style="font-family: Arial; font-size: 12pt; color: #000000; text-align: justify; line-height: 18pt; margin: 0; padding: 0;">&nbsp;</p>
+        <p style="font-family: Arial; font-size: 12pt; color: #000000; text-align: justify; line-height: 18pt; margin: 0; padding: 0;">
+          b) o arresto de tantos bens quantos bastem para garantir a satisfação do crédito caso o requerido não seja encontrado (art. 828 e seguintes, CPC);
+        </p>
+        <p style="font-family: Arial; font-size: 12pt; color: #000000; text-align: justify; line-height: 18pt; margin: 0; padding: 0;">&nbsp;</p>
+        <p style="font-family: Arial; font-size: 12pt; color: #000000; text-align: justify; line-height: 18pt; margin: 0; padding: 0;">
+          c) não ocorrendo o pagamento no prazo determinado, a aplicação da de multa e honorários advocatícios, cada qual no importe de 10%, nos termos do art. 523, § 1º do CPC, sem prejuízo da penhora online do valor devido, atualizado até o momento do bloqueio, nos termos dos arts. 835, I e 854, ambos do CPC;
+        </p>
+        <p style="font-family: Arial; font-size: 12pt; color: #000000; text-align: justify; line-height: 18pt; margin: 0; padding: 0;">&nbsp;</p>
+        <p style="font-family: Arial; font-size: 12pt; color: #000000; text-align: justify; line-height: 18pt; margin: 0; padding: 0;">
+          d) a intimação pessoal do membro da Defensoria Pública em atuação nesse Juízo, para acompanhar todos os atos do procedimento, com observância das prerrogativas institucionais previstas na Lei Complementar nº 80/94, nos arts. 185 e seguintes do CPC.
+        </p>
+        <p style="font-family: Arial; font-size: 12pt; color: #000000; text-align: justify; line-height: 18pt; margin: 0; padding: 0;">&nbsp;</p>
+        <p style="font-family: Arial; font-size: 12pt; color: #000000; text-align: center; line-height: 18pt; margin: 0; padding: 0;">
+          Nesses termos, pede deferimento.<br>${comarcaSelecionada}, ${dataAtualPorExtenso}.
+        </p>
+        <p style="font-family: Arial; font-size: 12pt; color: #000000; text-align: center; line-height: 18pt; margin: 0; padding: 0;">&nbsp;</p>
+        <p style="font-family: Arial; font-size: 12pt; color: #000000; font-weight: bold; text-align: center; line-height: 18pt; margin: 0; padding: 0;">
+          Patrícia Feitosa de Lima<br>Central de Cobrança de Recursos destinados ao FUNADEP<br>(documento assinado digitalmente)
+        </p>
+        <p style="font-family: Arial; font-size: 12pt; color: #000000; font-weight: bold; text-align: justify; line-height: 18pt; margin: 0; padding: 0;">
+        <p style="font-family: Arial; font-size: 12pt; color: #000000; font-weight: bold; text-align: justify; line-height: 18pt; margin: 0; padding: 0;">
+        <p style="font-family: Arial; font-size: 12pt; color: #000000; font-weight: bold; text-align: justify; line-height: 18pt; margin: 0; padding: 0;">    
+
+        <div style="page-break-before: always;"></div> <!-- Quebra de página -->
+
+        <p style="font-family: Arial; font-size: 12pt; color: #000000; font-weight: bold; text-align: justify; line-height: 12pt; margin: 0;">
+          DO DEMONSTRATIVO DISCRIMINADO E ATUALIZADO DO CRÉDITO
+        </p>
+        <p style="font-family: Arial; font-size: 12pt; color: #000000; text-align: justify; line-height: 12pt; margin: 0;">&nbsp;</p>
+        <p style="font-family: Arial; font-size: 12pt; color: #000000; text-align: justify; line-height: 12pt; margin: 0;">
+          De acordo com o artigo 524 do Código de Processo Civil, apresenta-se o demonstrativo discriminado e atualizado do crédito:
+        </p>
+        <p style="font-family: Arial; font-size: 12pt; color: #000000; text-align: justify; line-height: 12pt; margin: 0;">&nbsp;</p>
+        <ul style="font-family: Arial; font-size: 12pt; color: #000000; line-height: 12pt; margin: 0; padding-left: 20px;">
+          <li>Índice de correção monetária adotado: ${indiceCorrecao.toUpperCase()}</li>
+          <li>Termo inicial da correção monetária: ${dataDecisao.toLocaleDateString('pt-BR')}</li>
+          <li>Termo final da correção monetária: ${dataAtual.toLocaleDateString('pt-BR')}</li>
+          <li>Taxa de juros aplicada: ${jurosMora}% ao ano</li>
+          <li>Termo inicial dos juros de mora: ${dataTransito.toLocaleDateString('pt-BR')}</li>
+          <li>Termo final dos juros de mora: ${dataAtual.toLocaleDateString('pt-BR')}</li>
+          <li>Periodicidade da capitalização dos juros: Anual</li>
+        </ul>
+        <p style="font-family: Arial; font-size: 12pt; color: #000000; text-align: justify; line-height: 12pt; margin: 0;">&nbsp;</p>
+
+        <table style="width: 100%; border-collapse: collapse; font-family: Arial; font-size: 12pt; line-height: 12pt; margin: 0;">
+          <thead>
+            <tr style="background-color: #006400; color: #ffffff; text-align: left;">
+              <th style="padding: 10px; border: 1px solid #004d32;">Descrição</th>
+              <th style="padding: 10px; border: 1px solid #004d32;">Valor (R$)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="background-color: #f0f7f4; color: #000000;">
+              <td style="padding: 10px; border: 1px solid #ccc;">Valor Original</td>
+              <td style="padding: 10px; border: 1px solid #ccc;">${valorFixado.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</td>
+            </tr>
+            <tr style="background-color: #ffffff; color: #000000;">
+              <td style="padding: 10px; border: 1px solid #ccc;">Correção Monetária Acumulada</td>
+              <td style="padding: 10px; border: 1px solid #ccc;">${correcaoAcumulada.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</td>
+            </tr>
+            <tr style="background-color: #f0f7f4; color: #000000;">
+              <td style="padding: 10px; border: 1px solid #ccc;">Juros de Mora Acumulados</td>
+              <td style="padding: 10px; border: 1px solid #ccc;">${jurosAcumuladoComp.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</td>
+            </tr>
+            <tr style="background-color: #006400; color: #ffffff;">
+              <td style="padding: 10px; border: 1px solid #004d32; font-weight: bold;">Valor atualizado do crédito</td>
+              <td style="padding: 10px; border: 1px solid #004d32; font-weight: bold;">${valorFinal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</td>
+            </tr>
+          </tbody>
+        </table>
+      `;
+
+      // Define o conteúdo gerado no editor TinyMCE
+      tinymce.get('editorPeticao').setContent(textoPeticao);           
+    }
+
+    // Função para copiar texto do TinyMCE com formatação
+    function copiarTexto() {
+      const editor = tinymce.get('editorPeticao');
+      const content = editor.getContent({ format: 'html' });
+
+      if (!navigator.clipboard) {
+        alert("A API de área de transferência não está disponível neste navegador.");
+        return;
+      }
+
+      // Cria um Blob com o conteúdo HTML
+      const blob = new Blob([content], { type: 'text/html' });
+      const data = [new ClipboardItem({ 'text/html': blob })];
+
+      navigator.clipboard.write(data).then(function() {
+        alert("Texto copiado para a área de transferência.");
+      }, function(err) {
+        console.error('Erro ao copiar texto: ', err);
+        alert("Erro ao copiar o texto. Por favor, tente novamente.");
+      });
+    }
+
+    // Função para abrir o Word Online e permitir ao usuário colar
+    function exportarParaWordOnline() {
+      // Copia o texto do editor para a área de transferência
+      copiarTexto();
+
+      // Link do documento do SharePoint
+      const sharePointLink = "https://defensoriamsdef-my.sharepoint.com/:w:/g/personal/pedrol_defensoria_ms_def_br/EXxC-d5dWNdPnQRE2MuWIgYBj8rlUH1DUVX_wiXACMWwNw?e=byUsTr";
+
+      // Abre o link do documento do SharePoint para edição
+      window.open(sharePointLink, "_blank");
+    }
+
+  </script>
+</body>
+</html>

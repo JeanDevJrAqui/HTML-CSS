@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>listas</h1>
+    <h2>listas ordenadas</h2>
+    <p>se usa a tag <code>ol</code> para não precisar ordenar manualmente, usar o parametro dentro dessa tag chamado type te permite escolher o tipo de numeração ou ordemanento da lista alem de escolher por onde começar usando o parametro start(4 para nao começar do 1 ou i) e usando a tag li para informar que é uma item da lista</p>
+    <ol type="i" start="2">
+        <li>algo</li>
+        <li>isso</li>
+        <li>aquilo</li>
+    </ol>
+
+    <h2>listas não ordenadas</h2>
+    <p>listas não ordenadas usam a tag ul para marcar um ponto nos tópicos da lista e podem receber o parametro type sendo disc para bolinha preta, circle para um circulo vazado e square para um quadrado e posso fazer com que os itens de outra bulistas continuem a contagem da primeira usando o parametro start</p>
+    <ul type="circle">
+        <li>algo</li>
+        <li>isso</li>
+        <li>aquilo</li>
+    </ul>
+    <h2>juntando as listas</h2>
+    <ol>
+        <li>lista 1</li>
+        <ol type="a">
+            <li>primeiro item da lista 1</li>
+            <li>segundo item da lista 1</li>
+            <li>terceiro item da lista 1</li>
+        </ol>
+        <li>lista 2</li>
+        <ol type="i">
+            <li>primeiro item da lista 2</li>
+            <li>segundo item da lista 2</li>
+            <li>terceiro item da lista 2</li>
+        </ol>
+        <li>lista 3</li>
+        <ol type="a" start="4">
+            <li>primeiro item da lista 3</li>
+            <li>segundo item da lista 3</li>
+            <li>terceiro item da lista 3</li>
+        </ol>
+        <li>lista 4</li>
+        <ul type="circle">
+            <li>primeiro item da lista 4</li>
+            <li>segundo item da lista 4</li>
+            <li>terceiro item da lista 4</li>
+        </ul>
+    </ol>
+    <p><h3>PARA ALTERAR VARIAS TAGS PARA UMA MESMA IGUAL APERTA ALT SOBRE TODAS E VOCE ESCREVE TUDO AO MESMO TEMPO</h3></p>
+    <H2>lista de definições</H2>
+    <p>A LISTA DE DEFINIÇÃO usa a tag dl(definition list) a tag dt que é o termo e a tag dd  que é a descrição do termo e ajuda quando o google pesquisa definições para quem pesquisa</p>
+    <dl>
+        <dt>HTML</dt>
+        <dd>Linguagem de Marcação para criação de conteudo de um site.</dd>
+    </dl>
+    <h1>trbalhando com links</h1>
+    <p>link <a href="https://www.youtube.com/@Netero22" target="_blank" rel="external">youtube</a></p>
+    <p>target e rel abrem o link em nova aba</p><br>
+    <h2>links internos</h2>
+    <p>essa é a outra pagina <a href="pagina02.html" rel="next">aqui</a></p>
+    <p>O rel next e o prev serve para dar a semantica ao google de qual a pagina principal </p>
+    <p>Quando for indexar paginas que voce não sabe a procedencia ou de propagandas pode se usar o rel a informação "nofollow"</p>
+    <p>como aqui no <a href="https://www.youtube.com" rel="nofollow">link</a></p>
+    <br>
+    <h1>Download de arquivos</h1>
+    <ul>
+        <li><a href="livros/CURRICULO DEV JR.pdf" target="_blank">Baixar livro em pdf</a></li>
+    </ul>
+
+</body>
+</html>
