@@ -69,6 +69,9 @@ nav > a{
     text-decoration: none;
     font-weight: bold;
     transition-duration: 0.4;
+    position: relative;
+    box-shadow: -3px 0 5px rgba(0, 0, 0, 0.2),  
+                 3px 0 5px rgba(0, 0, 0, 0.2);
 }
 nav > a:hover{
     background-color: var(--cor3);
