@@ -7,21 +7,27 @@
     <link rel="stylesheet" href="style/style.css">
 </head>
 <body>
-    <div class="logo"><img src="img/logo.jpg" alt="Logo" class="logo"></div>
+    <div class="logo"><img src="img/logo.jpg" alt="Logo"></div>
     
     <div class="titulo">
-        <h2>Força ou Queda</h2>
-      </div>
+        <h2>Luta entre Hérios e Vilões</h2>
+    </div>
     
-      <main class="conteudo-jogo">
+    <main class="conteudo-jogo">
         <div id="container">
-          <h2>Escolha 3 jogadores para seu time:</h2>
-    
-          <p id="informacoesJogador" class="resultado"></p>
-          <p id="informacoesComputador" class="resultado"></p>
-          <button id="resultadoBtn" style="display:none;">Ver Resultado</button>
-          <h1 id="resultadoFinal" class="resultado"></h1>
-      </main>
+            <h2>Escolha 3 personagns para seu time:</h2>
+            <p>Seus personagens serão:</p>
+            <input type="text" id="escolhapersonagem" placeholder="Digite o Personagem">
+            <button onclick="adicionarPersonagem()">Confirmar Nome</button>
+            <button onclick="verResultado()">Ver resultado</button>
+            <button onclick="limpar()">Limpar</button>
+            <p>Seu time: <span id="time"></span></p>
+            <p>Vilões: <span id="viloes"></span></p>
+            <p>Força do seu time: <span id="forcaP"></span></p>
+            <p>Força dos vilões: <span id="forcaV"></span></p>
+            <p id="resultado"></p>
+        </div>
+    </main>
     <footer>Alura - Imersão DEV JeanDEVAqui- 2025</footer>
     <script src="script/script.js"></script>
 </body>

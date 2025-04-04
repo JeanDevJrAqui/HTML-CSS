@@ -1,29 +1,59 @@
-personagem = ["","",""];
-viloes = ["","",""];
-forcap = 0;
-forcav = 0;
+let personagens = [];
+let viloes = [];
+let grupoViloes = ["Voldemort", "Darth Vader", "Joker(Coringa)", "Sauron", "Madara", "Frieza", "Aizen", "Meruem", "Kaidou", "Light"];
+let forcaP = 0;
+let forcaV = 0;
 
-for(let i = 0; i < 3; i++){
-    escolhapersonagem = prompt("Digite o nome do personagem: " + (i + 1));
-    personagem[i] = escolhapersonagem;
-    indicealeatorio = Math.floor(Math.random() * 10);
-    grupoviloes = ["Voldemort","Darth Vader","Joker(Coringa)","Sauron","Madara","Frieza","Aizen","Meruem","Kaidou","Light"]
-    viloes[i] = grupoviloes[indicealeatorio];
-    forcap = forcap + Math.floor(Math.random()*10) + 1;
-    //forcap += Math.floor(Math.random()*10) + 1;   faz o mesmo que o de cima
-    forcav = forcav + Math.floor(Math.random()*10) + 1;
+        function adicionarPersonagem() {
+            let nome = document.getElementById("escolhapersonagem").value;
+            if (nome && personagens.length < 3) {
+                personagens.push(nome);
+                document.getElementById("time").textContent = personagens.join(", ");
+                document.getElementById("escolhapersonagem").value = "";
+            }
+        }
 
+        document.getElementById("escolhapersonagem").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                adicionarPersonagem();
+            }
+        });
 
-    /*escolhaviloes = prompt("Digite o nome do vilao: " + (i + 1)); para ser escolhido pelo jogador
-    viloes[i] = escolhaviloes;*/
-}
+        function verResultado() {
+            if (personagens.length < 3) {
+                alert("Escolha 3 personagens antes de continuar.");
+                return;
+            }
+            
+            for (let i = 0; i < 3; i++) {
+                let indiceAleatorio = Math.floor(Math.random() * grupoViloes.length);
+                viloes.push(grupoViloes[indiceAleatorio]);
+                forcaP += Math.floor(Math.random() * 10) + 1;
+                forcaV += Math.floor(Math.random() * 10) + 1;
+            }
+            
+            document.getElementById("viloes").textContent = viloes.join(", ");
+            document.getElementById("forcaP").textContent = forcaP;
+            document.getElementById("forcaV").textContent = forcaV;
+            
+            if (forcaP > forcaV) {
+                document.getElementById("resultado").textContent = "Parabéns, você ganhou!";
+            } else if (forcaP < forcaV) {
+                document.getElementById("resultado").textContent = "Sinto muito, você perdeu.";
+            } else {
+                document.getElementById("resultado").textContent = "Eita, deu empate!";
+            }
+        }
 
-alert("Agora o personagem contem: "+personagem+". E o vilão contem: "+viloes);
-
-if(forcap > forcav){
-    alert("Parabéns, você ganhou, seu time era mais forte, sua força foi de: "+forcap+" e a dos vilões era de: "+forcav);
-} else if(forcap < forcav){
-    alert("Sinto muito, você perdeu, seu time era mais fraco, sua força foi de: "+forcap+" e a dos vilões era de: "+forcav);
-} else{
-    alert("Eita, deu empate, sua força foi de: "+forcap+" e a dos vilões era de: "+forcav);
-}
+        function limpar() {
+            personagens = [];
+            viloes = [];
+            forcaP = 0;
+            forcaV = 0;
+            document.getElementById("time").textContent = "";
+            document.getElementById("viloes").textContent = "";
+            document.getElementById("forcaP").textContent = "";
+            document.getElementById("forcaV").textContent = "";
+            document.getElementById("resultado").textContent = "";
+            document.getElementById("escolhapersonagem").value = "";
+        }

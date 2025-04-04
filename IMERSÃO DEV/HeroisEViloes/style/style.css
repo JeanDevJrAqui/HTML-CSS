@@ -5,19 +5,28 @@ body {
   background-size: cover;
   font-family: "Gabarito", sans-serif;
   margin: 20px;
+  display: flex;
+  flex-direction: column;
 }
 
 .logo {
-  text-align: end;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  max-width: 300px;
+  max-height: 300px;
 }
 
 .logo img {
-  width: 40%;
+  width: 80%;
 }
 
-/* Caixa principal do jogo */
+.titulo{
+  background: rgba(0, 0, 0, 0.8);
+}
+
 .conteudo-jogo {
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(0, 0, 0, 0.61);
   box-shadow: 0 0 5px #ff1b7b;
   margin: 30px;
   padding: 20px;
@@ -26,15 +35,8 @@ body {
   margin-top: 2rem;
 }
 
-.conteudo-jogo:hover {
-  background: rgba(0, 0, 0);
-  box-shadow: 0 0 5px #19caca;
-}
-
-/* Títulos e textos */
-h2,
-p {
-  color: white;
+h2, p {
+  color: rgb(230, 219, 219);
 }
 
 button {
@@ -49,4 +51,15 @@ button {
 
 button:hover {
   background: #19caca;
+}
+
+footer {
+  text-align: center;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 10px;
+  position: relative;
+  width: 100%;
+  bottom: 0;
+  margin-top: 295px;
 }
