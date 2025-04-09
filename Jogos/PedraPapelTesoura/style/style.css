@@ -54,7 +54,13 @@ body {
   button:hover {
     background-color: #1ABC9C;
   }
-  
+  div.resultado{
+    margin-top: 5px;
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.589);
+    padding: 20px 40px;
+    border-radius: 8px;
+  }
   /* Footer Styles */
   footer {
     text-align: center;
