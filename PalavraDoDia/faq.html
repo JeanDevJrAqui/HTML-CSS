@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscador Bíblico Católico</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #f0f4f8;
+            line-height: 1.6;
+        }
+
+        
+    header {
+      background-color: #336699;
+      color: white;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+
+    nav a {
+      color: white;
+      margin-left: 15px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+
+        .container {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 25px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+ 
+        .search-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #b0c4de;
+            border-radius: 5px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus {
+            border-color: #1a3c6e;
+            outline: none;
+        }
+
+        button {
+            padding: 12px 20px;
+            background-color: #1a3c6e;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #355a9c;
+        }
+
+        #perguntas-sugeridas {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            border: 1px solid #e0e7ff;
+        }
+
+        #perguntas-sugeridas h3 {
+            color: #1a3c6e;
+            font-size: 1.3em;
+            margin-bottom: 10px;
+        }
+
+        #perguntas-sugeridas ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        #perguntas-sugeridas ul li {
+            margin-bottom: 10px;
+            color: #355a9c;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        #perguntas-sugeridas ul li:hover {
+            color: #1a3c6e;
+            text-decoration: underline;
+        }
+
+        #resultado {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            border: 1px solid #e0e7ff;
+        }
+
+        #resultado h3 {
+            color: #1a3c6e;
+            font-size: 1.4em;
+            margin-bottom: 15px;
+        }
+
+        #resultado .resposta-item {
+            margin-bottom: 20px;
+        }
+
+        #resultado .resposta-item h4 {
+            color: #355a9c;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+
+        #resultado ul {
+            padding-left: 20px;
+        }
+
+        #resultado p, #resultado li {
+            color: #333;
+        }
+
+        #resultado .pergunta-resultado {
+            margin-bottom: 10px;
+            color: #355a9c;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        #resultado .pergunta-resultado:hover {
+            color: #1a3c6e;
+            text-decoration: underline;
+        }
+
+        /* Responsividade */
+        @media (max-width: 600px) {
+            .container {
+                margin: 15px;
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 1.6em;
+            }
+
+            .search-box {
+                flex-direction: column;
+            }
+
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Palavra do Dia</h1>
+        <nav>
+          <a href="index.html">Início</a>
+          <a href="faq.html">Questionamentos Frequentes</a>
+          <a href="cacapalavras.html">Caça-palavras Mensal</a>
+        </nav>
+      </header>
+
+    <div class="container">
+        <h1>Buscador Bíblico Católico</h1>
+        <div class="search-box">
+            <input type="text" id="pergunta" placeholder="Digite sua pergunta sobre a Bíblia...">
+            <button onclick="buscarResposta()">Buscar</button>
+        </div>
+
+        <div id="perguntas-sugeridas">
+            <h3>Perguntas Sugeridas:</h3>
+            <ul id="lista-perguntas"></ul>
+        </div>
+
+        <div id="resultado"></div>
+    </div>
+
+    <script>
+        const bancoDeRespostas = [
+            {
+                pergunta: "por que a igreja não foi fundada por constantino?",
+                resposta: `A Igreja Católica não foi fundada por Constantino, mas por Jesus Cristo, conforme registrado na Bíblia. A ideia de que Constantino a fundou vem de mal-entendidos sobre seu papel ao legalizar o cristianismo com o Édito de Milão (313 d.C.) e convocar o Concílio de Niceia (325 d.C.). Porém, a Igreja já existia, com estrutura, doutrina e unidade, muito antes dele.
+                    <ul>
+                        <li><strong>Mateus 16:18:</strong> "Tu és Pedro, e sobre esta pedra edificarei a minha igreja, e as portas do inferno não prevalecerão contra ela." Jesus estabelece a Igreja, com Pedro como fundamento.</li>
+                        <li><strong>Atos 2:42-47:</strong> Após o Pentecostes, os cristãos formavam uma comunidade unida, com doutrina, oração e partilha, sob a liderança dos apóstolos.</li>
+                        <li><strong>Efésios 2:20:</strong> A Igreja é edificada "sobre o fundamento dos apóstolos e profetas, sendo o próprio Cristo Jesus a pedra angular."</li>
+                    </ul>
+                    <strong>Testemunhos dos Santos Primitivos:</strong>
+                    <ul>
+                        <li><strong>Santo Inácio de Antioquia (c. 107 d.C.):</strong> "Onde está o bispo, aí está a comunidade, assim como onde está Cristo, aí está a Igreja Católica" (<i>Carta aos Esmirniotas</i>, 8,2). Mostra o uso do termo "católica" e a unidade da Igreja.</li>
+                        <li><strong>Santo Irineu de Lião (c. 180 d.C.):</strong> "A Igreja, espalhada por todo o mundo, recebeu dos apóstolos a fé... e a guarda cuidadosamente, como se habitasse numa só casa" (<i>Contra as Heresias</i>, 3,3,2). Evidencia a unidade doutrinal.</li>
+                        <li><strong>Clemente de Roma (c. 96 d.C.):</strong> Descreve a sucessão apostólica, mostrando a continuidade da liderança instituída pelos apóstolos (<i>Carta aos Coríntios</i>, cap. 42-44).</li>
+                    </ul>
+                    Antes de Constantino, a Igreja já tinha bispos, sínodos, um cânon bíblico em formação e liturgia estruturada. Constantino apenas facilitou a expansão da Igreja, mas não a criou. A unidade "católica" era mantida pela sucessão apostólica e comunhão entre comunidades (Catecismo, 813-816).`
+            },
+            {
+                pergunta: "onde tem a citação do purgatório?",
+                resposta: `A doutrina católica do Purgatório não é explicitamente chamada pelo nome na Bíblia, mas é fundamentada em passagens que sugerem um processo de purificação após a morte:
+                    <ul>
+                        <li><strong>Mateus 12:32:</strong> "Se alguém falar contra o Filho do Homem, ser-lhe-á perdoado; mas se falar contra o Espírito Santo, não lhe será perdoado, nem neste mundo, nem no futuro." Isso implica que alguns pecados podem ser perdoados após a morte.</li>
+                        <li><strong>1 Coríntios 3:15:</strong> "Se a obra de alguém se queimar, sofrerá prejuízo; mas o tal será salvo, ainda que como pelo fogo." Sugere uma purificação pelo fogo para os salvos.</li>
+                        <li><strong>2 Macabeus 12:46:</strong> "Portanto, é um pensamento santo e salutar orar pelos mortos, para que sejam livres dos seus pecados." (Livro deuterocanônico aceito pela Igreja Católica).</li>
+                    </ul>
+                    A Igreja ensina que o Purgatório é um estado de purificação para aqueles que morrem na graça de Deus, mas ainda precisam expiar pecados veniais ou penas temporais (Catecismo, 1030-1032).`
+            },
+            {
+                pergunta: "Onde é proibido a Sola Scriptura?",
+                resposta: `A Bíblia não proíbe explicitamente a "Sola Scriptura", mas aponta para a importância da Tradição Apostólica e do Magistério:
+                    <ul>
+                        <li><strong>2 Tessalonicenses 2:15:</strong> "Permanecei firmes e guardai as tradições que vos foram ensinadas, seja por palavra, seja por epístola nossa."</li>
+                        <li><strong>2 Tessalonicenses 3:6:</strong> "Mandamo-vos... que vos aparteis de todo irmão que anda desordenadamente e não segundo a tradição que de nós recebeu."</li>
+                        <li><strong>2 Pedro 1:20:</strong> "Nenhuma profecia da Escritura é de particular interpretação."</li>
+                    </ul>
+                    A Igreja ensina que a revelação divina vem pela Escritura, Tradição e Magistério (Catecismo, 80-100).`
+            },
+            {
+                pergunta: "quem foi o primeiro papa?",
+                resposta: `São Pedro é considerado o primeiro Papa:
+                    <ul>
+                        <li><strong>Mateus 16:18-19:</strong> "Tu és Pedro, e sobre esta pedra edificarei a minha igreja... Dar-te-ei as chaves do Reino dos céus."</li>
+                        <li><strong>Atos 2:14:</strong> Pedro lidera os apóstolos.</li>
+                    </ul>
+                    A Igreja vê Pedro como o fundamento do papado (Catecismo, 880-882).`
+            },
+            {
+                pergunta: "onde diz que pedro era papa?",
+                resposta: `A Bíblia não usa o termo "Papa", mas indica a liderança de Pedro:
+                    <ul>
+                        <li><strong>Mateus 16:18-19:</strong> "Tu és Pedro, e sobre esta pedra edificarei a minha igreja... Dar-te-ei as chaves do Reino dos céus."</li>
+                        <li><strong>João 21:15-17:</strong> "Apascenta as minhas ovelhas."</li>
+                    </ul>
+                    A Igreja interpreta isso como a instituição do papado (Catecismo, 881).`
+            },
+            {
+                pergunta: "onde está que os apóstolos passaram seus poderes a frente?",
+                resposta: `A sucessão apostólica é fundamentada em:
+                    <ul>
+                        <li><strong>Atos 1:20-26:</strong> Matias substitui Judas, mostrando continuidade do ofício.</li>
+                        <li><strong>1 Timóteo 4:14:</strong> "Não descuides do dom que há em ti... com a imposição das mãos."</li>
+                    </ul>
+                    A Igreja ensina que os apóstolos transmitiram sua autoridade aos bispos (Catecismo, 860-862).`
+            },
+            {
+                pergunta: "por que a igreja católica é a certa?",
+                resposta: `A Igreja Católica acredita ser a fundada por Jesus:
+                    <ul>
+                        <li><strong>Mateus 16:18:</strong> "Sobre esta pedra edificarei a minha igreja."</li>
+                        <li><strong>1 Timóteo 3:15:</strong> A Igreja é "coluna e baluarte da verdade."</li>
+                    </ul>
+                    Sua continuidade histórica e sucessão apostólica a distinguem (Catecismo, 813-815).`
+            },
+            {
+                pergunta: "onde está na bíblia os santos?",
+                resposta: `"Santos" refere-se aos fiéis e aos glorificados no céu:
+                    <ul>
+                        <li><strong>Apocalipse 5:8:</strong> Anciãos oferecem orações dos fiéis.</li>
+                        <li><strong>Romanos 1:7:</strong> Chama os cristãos de "santos".</li>
+                    </ul>
+                    A Igreja canoniza santos como exemplos de fé (Catecismo, 956).`
+            },
+            {
+                pergunta: "onde está a Devoção a Maria?",
+                resposta: `A devoção a Maria baseia-se em:
+                    <ul>
+                        <li><strong>Lucas 1:28:</strong> "Ave, cheia de graça, o Senhor é contigo."</li>
+                        <li><strong>Lucas 1:48:</strong> "Todas as gerações me chamarão bem-aventurada."</li>
+                    </ul>
+                    Maria é honrada como Mãe de Deus e intercessora (Catecismo, 971).`
+            },
+            {
+                pergunta: "onde está que preciso me confessar com alguém e não direto com Deus?",
+                resposta: `A confissão a um sacerdote baseia-se em:
+                    <ul>
+                        <li><strong>João 20:22-23:</strong> "Àqueles a quem perdoardes os pecados, ser-lhes-ão perdoados."</li>
+                        <li><strong>Tiago 5:16:</strong> "Confessai os vossos pecados uns aos outros."</li>
+                    </ul>
+                    Sacerdotes absolvem em nome de Deus (Catecismo, 1441-1442).`
+            },
+            {
+                pergunta: "onde está a intercessão?",
+                resposta: `A intercessão dos santos é sugerida em:
+                    <ul>
+                        <li><strong>Apocalipse 5:8:</strong> Anciãos oferecem orações dos fiéis.</li>
+                        <li><strong>Hebreus 12:1:</strong> "Nuvem de testemunhas" nos acompanha.</li>
+                    </ul>
+                    Santos intercedem por nós (Catecismo, 956).`
+            },
+            {
+                pergunta: "onde está a intercessão dos mortos?",
+                resposta: `A intercessão dos mortos é implícita em:
+                    <ul>
+                        <li><strong>2 Macabeus 12:46:</strong> Orações pelos mortos.</li>
+                        <li><strong>Apocalipse 5:8:</strong> Anciãos apresentam orações.</li>
+                    </ul>
+                    A comunhão dos santos inclui intercessão (Catecismo, 958).`
+            },
+            {
+                pergunta: "por que o certo é guardar o domingo e não mais o sábado?",
+                resposta: `O domingo substituiu o sábado por causa da Ressurreição:
+                    <ul>
+                        <li><strong>Atos 20:7:</strong> Cristãos se reuniam no "primeiro dia".</li>
+                        <li><strong>Apocalipse 1:10:</strong> "Dia do Senhor" (domingo).</li>
+                    </ul>
+                    É o dia cristão de culto (Catecismo, 2174-2176).`
+            },
+            {
+                pergunta: "se na bíblia diz que jesus tinha irmãos, por que a igreja diz que não é verdade?",
+                resposta: `"Irmãos" de Jesus são interpretados como parentes:
+                    <ul>
+                        <li><strong>Marcos 6:3:</strong> Menciona "irmãos", mas hebraico usa o termo para primos.</li>
+                        <li><strong>João 19:25-27:</strong> Jesus confia Maria a João, sugerindo ausência de outros filhos.</li>
+                    </ul>
+                    Maria permaneceu virgem (Catecismo, 499-500).`
+            },
+            {
+                pergunta: "por que precisamos de fé e obra?",
+                resposta: `Fé e obras cooperam para a salvação:
+                    <ul>
+                        <li><strong>Tiago 2:17:</strong> "A fé, se não tiver obras, é morta."</li>
+                        <li><strong>Mateus 25:35-40:</strong> Obras de misericórdia são julgadas.</li>
+                    </ul>
+                    A graça opera pela fé viva em obras (Catecismo, 1814-1816).`
+            },
+            {
+                pergunta: "por que vocês adoram imagens?",
+                resposta: `A Igreja não adora, mas venera imagens:
+                    <ul>
+                        <li><strong>Êxodo 25:18-22:</strong> Deus ordena fazer querubins.</li>
+                        <li><strong>Números 21:8-9:</strong> Serpente de bronze para cura.</li>
+                    </ul>
+                    Imagens elevam a mente a Deus (Catecismo, 2130-2132).`
+            },
+            {
+                pergunta: "por que vocês chamam padres de 'pai' sendo que Jesus proibiu isso?",
+                resposta: `"Pai" é um título espiritual:
+                    <ul>
+                        <li><strong>1 Coríntios 4:15:</strong> Paulo se chama "pai" dos coríntios.</li>
+                        <li><strong>Mateus 23:9:</strong> Proíbe usurpar a paternidade divina, não títulos.</li>
+                    </ul>
+                    Reflete o papel pastoral (Catecismo, 1549).`
+            },
+            {
+                pergunta: "por que vocês acreditam em tradições humanas?",
+                resposta: `A Igreja distingue a Sagrada Tradição de tradições humanas:
+                    <ul>
+                        <li><strong>2 Tessalonicenses 2:15:</strong> "Guardai as tradições que vos foram ensinadas."</li>
+                        <li><strong>2 Timóteo 2:2:</strong> Transmissão do ensino apostólico.</li>
+                    </ul>
+                    A Tradição complementa a Escritura (Catecismo, 80-83).`
+            },
+            {
+                pergunta: "por que vocês batizam bebês que não têm consciência?",
+                resposta: `O batismo remove o pecado original:
+                    <ul>
+                        <li><strong>Atos 16:15:</strong> Batismo de famílias inteiras.</li>
+                        <li><strong>Marcos 16:16:</strong> "Quem crer e for batizado será salvo."</li>
+                    </ul>
+                    A fé da Igreja supre a dos bebês (Catecismo, 1250-1252).`
+            },
+            {
+                pergunta: "por que vocês acreditam que Maria foi sempre virgem?",
+                resposta: `Maria permaneceu virgem antes, durante e após o nascimento de Jesus:
+                    <ul>
+                        <li><strong>Lucas 1:34:</strong> "Como se fará isto, pois não conheço varão?"</li>
+                        <li><strong>Mateus 13:55:</strong> "Irmãos" são parentes, não filhos.</li>
+                    </ul>
+                    A virgindade perpétua é dogma (Catecismo, 499-500).`
+            },
+            {
+                pergunta: "por que o papa é infalível?",
+                resposta: `A infalibilidade papal ocorre ex cathedra:
+                    <ul>
+                        <li><strong>Mateus 16:18-19:</strong> Jesus dá a Pedro as chaves.</li>
+                        <li><strong>Lucas 22:32:</strong> "Roguei por ti, para que a tua fé não desfaleça."</li>
+                    </ul>
+                    Garante a verdade da fé (Catecismo, 889-892).`
+            },
+            {
+                pergunta: "por que vocês acreditam em sacramentos?",
+                resposta: `Os sacramentos são sinais da graça instituídos por Cristo:
+                    <ul>
+                        <li><strong>Mateus 28:19:</strong> Batismo.</li>
+                        <li><strong>João 20:23:</strong> Confissão.</li>
+                        <li><strong>Mateus 26:26-28:</strong> Eucaristia.</li>
+                    </ul>
+                    Comunicam a graça divina (Catecismo, 1127-1131).`
+            },
+            {
+                pergunta: "o que é a eucaristia?",
+                resposta: `A Eucaristia é o sacramento onde Cristo se faz presente:
+                    <ul>
+                        <li><strong>Mateus 26:26-28:</strong> "Isto é o meu corpo... Isto é o meu sangue."</li>
+                        <li><strong>João 6:53:</strong> "Se não comerdes a carne do Filho do Homem... não tereis a vida."</li>
+                    </ul>
+                    O pão e vinho tornam-se Corpo e Sangue de Cristo (Catecismo, 1374-1377).`
+            },
+            {
+                pergunta: "por que a trindade é importante?",
+                resposta: `A Trindade é o mistério de um Deus em três Pessoas:
+                    <ul>
+                        <li><strong>Mateus 28:19:</strong> "Em nome do Pai, do Filho e do Espírito Santo."</li>
+                        <li><strong>2 Coríntios 13:13:</strong> "A graça do Senhor Jesus Cristo, o amor de Deus e a comunhão do Espírito Santo."</li>
+                    </ul>
+                    É o cerne da fé cristã (Catecismo, 232-267).`
+            },
+            {
+                pergunta: "por que a igreja católica usa água benta?",
+                resposta: `A água benta é usada como sinal de purificação e proteção espiritual:
+                    <ul>
+                        <li><strong>Êxodo 30:18-21:</strong> Deus ordena bacias para purificação no culto.</li>
+                        <li><strong>Números 19:9:</strong> Água purificadora era usada no Antigo Testamento.</li>
+                    </ul>
+                    A Igreja a utiliza em bênçãos e sacramentos, recordando o batismo e a graça de Deus (Catecismo, 1667-1668).`
+            },
+            {
+                pergunta: "o que é o pecado original?",
+                resposta: `O pecado original é a condição de privação da graça herdada pelo pecado de Adão e Eva:
+                    <ul>
+                        <li><strong>Gênesis 3:16-19:</strong> A desobediência traz consequências à humanidade.</li>
+                        <li><strong>Romanos 5:12:</strong> "Por um só homem entrou o pecado no mundo."</li>
+                    </ul>
+                    É removido pelo batismo, restaurando a graça (Catecismo, 404-405).`
+            },
+            {
+                pergunta: "por que a igreja proíbe o aborto?",
+                resposta: `A Igreja defende a vida desde a concepção:
+                    <ul>
+                        <li><strong>Jeremias 1:5:</strong> "Antes que te formasses no ventre materno, eu te conheci."</li>
+                        <li><strong>Êxodo 20:13:</strong> "Não matarás."</li>
+                    </ul>
+                    O aborto é contra a dignidade humana (Catecismo, 2270-2275).`
+            },
+            {
+                pergunta: "o que significa a transubstanciação?",
+                resposta: `Transubstanciação é a mudança da substância do pão e vinho no Corpo e Sangue de Cristo:
+                    <ul>
+                        <li><strong>Mateus 26:26-28:</strong> "Isto é o meu corpo... Isto é o meu sangue."</li>
+                        <li><strong>João 6:51:</strong> "O pão que eu darei é a minha carne."</li>
+                    </ul>
+                    A aparência permanece, mas a realidade é Cristo (Catecismo, 1374-1376).`
+            },
+            {
+                pergunta: "por que rezamos o rosário?",
+                resposta: `O Rosário é uma oração meditativa sobre a vida de Cristo e Maria:
+                    <ul>
+                        <li><strong>Lucas 1:28:</strong> A Ave-Maria inicia com a saudação do anjo.</li>
+                        <li><strong>João 19:27:</strong> Maria é nossa mãe espiritual.</li>
+                    </ul>
+                    Medita os mistérios da salvação, unindo-nos a Cristo (Catecismo, 971, 2708).`
+            },
+            {
+                pergunta: "o que é o juízo final?",
+                resposta: `O Juízo Final é quando Cristo julgará todos os vivos e mortos:
+                    <ul>
+                        <li><strong>Mateus 25:31-46:</strong> Jesus separa as ovelhas dos cabritos.</li>
+                        <li><strong>Apocalipse 20:12:</strong> "Os mortos foram julgados segundo suas obras."</li>
+                    </ul>
+                    Revelará a justiça de Deus e o destino eterno (Catecismo, 1038-1041).`
+            },
+            {
+                pergunta: "por que a igreja incentiva a castidade?",
+                resposta: `A castidade ordena a sexualidade ao amor e à vida:
+                    <ul>
+                        <li><strong>1 Coríntios 6:18-20:</strong> "Fugi da fornicação... Vosso corpo é templo do Espírito Santo."</li>
+                        <li><strong>Mateus 5:8:</strong> "Bem-aventurados os puros de coração."</li>
+                    </ul>
+                    Promove a dignidade humana e a união com Deus (Catecismo, 2337-2350).`
+            },
+            {
+                pergunta: "o que são indulgências?",
+                resposta: `Indulgências removem penas temporais do pecado perdoado:
+                    <ul>
+                        <li><strong>Mateus 16:19:</strong> "O que ligares na terra terá sido ligado nos céus."</li>
+                        <li><strong>2 Coríntios 5:18:</strong> Ministério da reconciliação.</li>
+                    </ul>
+                    São graças obtidas por atos piedosos (Catecismo, 1471-1479).`
+            },
+            {
+                pergunta: "qual a diferença entre o juízo particular e o juízo final?",
+                resposta: `O Juízo Particular ocorre logo após a morte, determinando o destino imediato da alma; o Juízo Final, no fim dos tempos, revela publicamente a justiça de Deus:
+                    <ul>
+                        <li><strong>Hebreus 9:27:</strong> "Está reservado aos homens morrer uma só vez, e depois disso o juízo." Refere-se ao Juízo Particular ao morrer.</li>
+                        <li><strong>Lucas 16:19-31:</strong> A parábola do Rico e Lázaro mostra destinos distintos após a morte (Juízo Particular).</li>
+                        <li><strong>Mateus 25:31-46:</strong> Jesus julga todas as nações no fim dos tempos (Juízo Final).</li>
+                        <li><strong>Apocalipse 20:12-13:</strong> Os mortos são julgados segundo suas obras no último dia (Juízo Final).</li>
+                    </ul>
+                    O Juízo Particular fixa o estado da alma (céu, purgatório ou inferno); o Juízo Final manifesta a glória de Deus e a unidade da criação redimida (Catecismo, 1021-1022, 1038-1041).`
+            },
+            {
+    pergunta: "qual o problema com orações repetitivas?",
+    resposta: `Orações repetitivas podem se tornar vazias quando feitas de forma mecânica, sem atenção ou intenção real. Jesus alertou sobre isso:
+        <ul>
+            <li><strong>Mateus 6:7:</strong> "E orando, não useis de vãs repetições, como os gentios, que pensam que por muito falarem serão ouvidos."</li>
+            <li><strong>Eclesiastes 5:2:</strong> "Não te precipites com a tua boca, nem o teu coração se apresse a pronunciar palavra alguma diante de Deus."</li>
+        </ul>
+        Isso não significa que não se pode repetir orações (como o Pai Nosso), mas que elas devem ser feitas com fé, consciência e coração sincero. A repetição só tem valor quando vem do amor e da devoção (Catecismo, 2708-2711).`
+            },
+            {
+        pergunta: "Por que a missa é um sacrifício se Jesus já morreu na cruz?",
+        resposta: `A Missa é o memorial do único sacrifício de Cristo, tornado presente de forma incruenta (sem derramamento de sangue):
+            <ul>
+                <li><strong>Lucas 22:19:</strong> "Fazei isto em memória de mim" — Jesus institui a Eucaristia como memorial do seu sacrifício.</li>
+                <li><strong>Hebreus 9:26-28:</strong> Cristo se ofereceu uma vez por todas, mas esse único sacrifício é aplicado a nós através da Missa.</li>
+                <li><strong>1 Coríntios 11:26:</strong> "Todas as vezes que comerdes este pão... anunciais a morte do Senhor."</li>
+            </ul>
+            A Missa não repete o Calvário, mas o torna presente sacramentalmente (Catecismo, 1362-1372).`
+    },
+    {
+        pergunta: "Por que usar velas, incenso e objetos sagrados?",
+        resposta: `Esses elementos expressam o sagrado, a reverência e a presença de Deus:
+            <ul>
+                <li><strong>Êxodo 30:7:</strong> Incenso era usado no culto do Antigo Testamento.</li>
+                <li><strong>Apocalipse 5:8:</strong> O incenso representa as orações dos santos.</li>
+                <li><strong>Mateus 2:11:</strong> Os Magos ofereceram ouro, incenso e mirra a Jesus.</li>
+            </ul>
+            A Igreja utiliza sinais visíveis para elevar nosso espírito ao invisível (Catecismo, 1151-1162).`
+    },
+    {
+        pergunta: "Por que a Bíblia Católica tem mais livros que a protestante?",
+        resposta: `A Bíblia Católica contém os livros deuterocanônicos que os judeus de Alexandria usavam e que Jesus e os Apóstolos citavam implicitamente:
+            <ul>
+                <li><strong>Sabedoria 2:12-20:</strong> Profecia exata da Paixão de Cristo, escrita antes de Jesus — rejeitada pelos protestantes.</li>
+                <li><strong>Hebreus 11:35:</strong> Faz referência a um martírio descrito em 2 Macabeus 7 (livro deuterocanônico).</li>
+                <li><strong>Lucas 24:44:</strong> Jesus fala da Lei, dos Profetas e dos Salmos — aceitando o cânon mais amplo da época.</li>
+            </ul>
+            Jesus, sendo Deus, não poderia endossar um erro. A Igreja definiu o cânon em concílios como o de Hipona (393) e Cartago (397), ratificado em Trento (1546).`
+    },
+    {
+        pergunta: "De onde vêm os 7 sacramentos?",
+        resposta: `Todos os sacramentos têm fundamento nas ações e palavras de Jesus e foram confiados à Igreja:
+            <ul>
+                <li><strong>Batismo:</strong> Mateus 28:19 — "Ide e batizai em nome do Pai, do Filho e do Espírito Santo."</li>
+                <li><strong>Confirmação:</strong> Atos 8:14-17 — Pedro e João impõem as mãos para receber o Espírito Santo.</li>
+                <li><strong>Eucaristia:</strong> Lucas 22:19 — "Isto é o meu corpo..."</li>
+                <li><strong>Confissão:</strong> João 20:22-23 — "A quem perdoardes os pecados, ser-lhes-ão perdoados."</li>
+                <li><strong>Unção dos enfermos:</strong> Tiago 5:14 — "Unjam com óleo e o Senhor os levantará."</li>
+                <li><strong>Ordem:</strong> 2 Timóteo 1:6 — "Reavives a graça que está em ti pela imposição das minhas mãos."</li>
+                <li><strong>Matrimônio:</strong> Mateus 19:6 — "O que Deus uniu, o homem não separe."</li>
+            </ul>
+            Os sacramentos são sinais eficazes da graça instituídos por Cristo (Catecismo, 1113-1131).`
+    },
+    {
+        pergunta: "Por que a Igreja tem hierarquia (papa, bispos, padres)?",
+        resposta: `A hierarquia foi instituída pelo próprio Cristo para guiar a Igreja:
+            <ul>
+                <li><strong>Mateus 16:18-19:</strong> "Tu és Pedro, e sobre esta pedra edificarei a minha Igreja."</li>
+                <li><strong>João 21:17:</strong> "Apascenta as minhas ovelhas" — Jesus confia a Pedro o cuidado do rebanho.</li>
+                <li><strong>Atos 14:23:</strong> Os apóstolos instituíram presbíteros (padres) nas comunidades.</li>
+                <li><strong>Tito 1:5:</strong> Paulo manda ordenar presbíteros em cada cidade.</li>
+            </ul>
+            A hierarquia serve à unidade e à fidelidade da Igreja (Catecismo, 880-896).`
+    },
+    {
+        pergunta: "Por que a comunhão só pode ser dada por ministros ordenados?",
+        resposta: `Porque o poder de consagrar e distribuir a Eucaristia vem do sacramento da Ordem:
+            <ul>
+                <li><strong>1 Coríntios 4:1:</strong> "Que os homens nos considerem como ministros de Cristo e dispenseiros dos mistérios de Deus."</li>
+                <li><strong>Lucas 22:19:</strong> "Fazei isto em memória de mim" — dito aos Apóstolos.</li>
+                <li><strong>João 6:51:</strong> "O pão que eu darei é a minha carne..." — exige reverência e autoridade.</li>
+            </ul>
+            O sacerdote age na pessoa de Cristo (in persona Christi) na consagração (Catecismo, 1142-1144, 1411).`
+    },
+    {
+        pergunta: "Onde está na Bíblia a unção dos enfermos?",
+        resposta: `A unção dos enfermos é uma prática claramente bíblica e apostólica:
+            <ul>
+                <li><strong>Tiago 5:14-15:</strong> "Está alguém doente entre vós? Chame os presbíteros da Igreja e orem sobre ele, ungindo-o com óleo."</li>
+                <li><strong>Marcos 6:13:</strong> "Ungiam muitos enfermos com óleo e os curavam."</li>
+            </ul>
+            Esse sacramento fortalece, cura e prepara o cristão para enfrentar o sofrimento com fé (Catecismo, 1499-1523).`
+    },
+    {
+        pergunta: "Por que jejuar ou fazer penitência?",
+        resposta: `Jesus nos ensina que jejum e penitência são meios de conversão:
+            <ul>
+                <li><strong>Mateus 6:16-18:</strong> Jesus ensina como jejuar corretamente.</li>
+                <li><strong>Mateus 9:15:</strong> "Dias virão em que o esposo lhes será tirado, e então jejuarão."</li>
+                <li><strong>Jonas 3:5:</strong> O povo de Nínive jejuou e Deus se compadeceu.</li>
+            </ul>
+            A penitência nos aproxima de Deus, nos fortalece espiritualmente e repara nossas faltas (Catecismo, 1434-1439).`
+    },
+    {
+        pergunta: "Por que a Igreja venera relíquias?",
+        resposta: `A veneração de relíquias é uma expressão do respeito pelos corpos dos santos, templos do Espírito Santo:
+            <ul>
+                <li><strong>2 Reis 13:21:</strong> Um morto ressuscita ao tocar os ossos de Eliseu.</li>
+                <li><strong>Atos 19:11-12:</strong> Lenços tocados por Paulo curavam os doentes.</li>
+            </ul>
+            A veneração não é adoração, mas reconhecimento da ação de Deus nos santos (Catecismo, 1674).`
+    },
+    {
+        pergunta: "É idolatria beijar a cruz ou imagens?",
+        resposta: `Não, pois não adoramos a imagem, mas quem ela representa:
+            <ul>
+                <li><strong>Êxodo 25:18-20:</strong> Deus mandou fazer querubins de ouro sobre a arca.</li>
+                <li><strong>Números 21:8-9:</strong> Deus manda Moisés fazer uma serpente de bronze para curar o povo.</li>
+                <li><strong>João 3:14:</strong> Jesus compara-se à serpente de bronze.</li>
+            </ul>
+            A idolatria é adorar a criatura como se fosse Deus. O católico venera imagens como auxílio à fé, e não como deuses (Catecismo, 2131-2132).`
+    },
+    {
+    pergunta: "Por que usar o sinal da cruz?",
+    resposta: `O sinal da cruz é uma profissão visível da fé na Trindade. Jesus ordena o batismo "em nome do Pai, do Filho e do Espírito Santo" (Mateus 28:19). O sinal da cruz lembra essa fórmula e marca os cristãos como pertencentes a Cristo. No Catecismo, o §2157 afirma: \"O cristão começa seu dia, suas orações e suas atividades com o sinal da cruz...\".`
+  },
+  {
+    pergunta: "Por que vocês têm novenas, terços e devoções diferentes?",
+    resposta: `São práticas piedosas que ajudam a meditar nas verdades da fé e nos mistérios da vida de Cristo. Lucas 18:1 mostra que Jesus recomenda orar sempre, sem desanimar. O Catecismo (§1674-1676) reconhece o valor das devoções populares quando orientadas corretamente para Cristo.`
+  },
+  {
+    pergunta: "A Bíblia condena a idolatria, por que vocês têm imagens?",
+    resposta: `A idolatria é condenada (Êxodo 20:4-5), mas o uso de imagens com finalidade pedagógica e devocional não é idolatria. Deus ordena imagens no Templo (Êxodo 25:18-20). O Catecismo (§2131) ensina que a veneração de imagens sagradas é distinta da adoração de Deus.`
+  },
+  {
+    pergunta: "O que significa a intercessão de Maria e dos santos?",
+    resposta: `Significa pedir que os santos intercedam por nós diante de Deus, assim como pedimos orações a outras pessoas. Em Apocalipse 5:8, os santos oferecem nossas orações a Deus. O Catecismo (§956) afirma que os santos continuam a cuidar dos que estão na Terra.`
+  },
+  {
+    pergunta: "Por que orar pelos mortos se o destino da alma já está definido?",
+    resposta: `Porque oramos pelos que estão no purgatório, em processo de purificação (2Macabeus 12:46). A oração ajuda essas almas. O Catecismo (§1032) recomenda a oração pelos defuntos para que sejam purificados e possam entrar na visão beatífica.`
+  },
+  {
+    pergunta: "Onde a Bíblia fala do purgatório claramente?",
+    resposta: `2Macabeus 12:46 diz: \"É santo e salutar o pensamento de orar pelos mortos, para que sejam livres de seus pecados.\" 1Coríntios 3:15 fala da salvação por meio do fogo. O Catecismo (§1030-1032) explica que o purgatório é a purificação final dos eleitos.`
+  },
+  {
+    pergunta: "Por que batizar em nome da Trindade?",
+    resposta: `Porque foi assim que Jesus ordenou em Mateus 28:19. O batismo em nome do Pai, do Filho e do Espírito Santo é a fórmula sacramental correta. O Catecismo (§232, §189) afirma que o cristão é batizado em nome da Trindade.`
+  },
+  {
+    pergunta: "Jesus é Deus ou apenas um profeta?",
+    resposta: `Jesus é Deus. João 1:1-14 diz que o Verbo era Deus e se fez carne. Em João 10:30, Jesus diz: \"Eu e o Pai somos um.\" O Catecismo (§464-469) ensina que Jesus é verdadeiro Deus e verdadeiro homem.`
+  },
+  {
+    pergunta: "O que é a graça santificante e como se perde?",
+    resposta: `É um dom sobrenatural que nos torna filhos de Deus. Recebemos no batismo e a perdemos com o pecado mortal. Romanos 5:1-5 fala da graça recebida. O Catecismo (§1999, §1861) explica que o pecado mortal destrói essa graça.`
+  },
+  {
+    pergunta: "A salvação é garantida?",
+    resposta: `Não é automática. Devemos perseverar na fé e na graça até o fim. Filipenses 2:12 diz: \"Trabalhai na vossa salvação com temor e tremor.\" O Catecismo (§162, §2016) mostra que a salvação exige resposta livre e perseverança.`
+  },
+  {
+    pergunta: "Onde está na Bíblia que devemos seguir a Tradição?",
+    resposta: `2Tessalonicenses 2:15 diz: \"Guardai as tradições que vos ensinamos, de viva voz ou por carta.\" A Tradição apostólica é parte da Revelação divina. O Catecismo (§78-83) explica que Tradição e Escritura formam um só depósito da fé.`
+  },
+  {
+    pergunta: "A Igreja errou no passado. Como pode ser verdadeira?",
+    resposta: `A Igreja é santa em sua origem (Cristo) e missão, mas seus membros são pecadores. Mesmo com falhas humanas, a Igreja é assistida pelo Espírito Santo (João 16:13). O Catecismo (§827) reconhece que a Igreja é santa e chamada à conversão.`
+  },
+  {
+    pergunta: "Por que existem dogmas?",
+    resposta: `Dogmas são verdades reveladas por Deus, definidas pela Igreja para proteger a fé. Ex: a Trindade, a divindade de Cristo. 1Timóteo 3:15 diz que a Igreja é coluna e sustentáculo da verdade. O Catecismo (§88-89) explica que os dogmas são luzes no caminho da fé.`
+  },
+  {
+    pergunta: "Se a Bíblia é suficiente, por que há tantas interpretações diferentes?",
+    resposta: `Porque a Bíblia precisa de interpretação autorizada. 2Pedro 1:20-21 diz que nenhuma profecia é de interpretação particular. O Catecismo (§100) afirma que a interpretação da Escritura pertence ao Magistério da Igreja.`
+  },
+  {
+    pergunta: "A Igreja Católica acrescentou coisas à Bíblia?",
+    resposta: `Não. A Igreja definiu os livros inspirados, preservando a fé. O Concílio de Hipona (393) e Cartago (397) reconheceram os 73 livros. O Catecismo (§120) lista os livros inspirados conforme a tradição apostólica.`
+  },
+  {
+    pergunta: "Por que a Igreja é contra o casamento gay?",
+    resposta: `Porque Deus criou o casamento como união entre homem e mulher (Gênesis 2:24). Romanos 1:26-27 condena relações homossexuais. O Catecismo (§2357) ensina que atos homossexuais são desordenados, mas pessoas devem ser acolhidas com respeito.`
+  },
+  {
+    pergunta: "Por que a Igreja é contra métodos contraceptivos?",
+    resposta: `Porque vão contra o plano de Deus para o amor conjugal, que deve ser aberto à vida. Gênesis 1:28: \"Sede fecundos.\" O Catecismo (§2370) condena a contracepção artificial, pois separa o ato sexual de seu fim procriador.`
+  },
+  {
+    pergunta: "Por que não posso viver minha fé “do meu jeito”?",
+    resposta: `Porque a fé verdadeira é resposta à Revelação de Deus, não invenção pessoal. João 14:6: \"Eu sou o caminho, a verdade e a vida.\" O Catecismo (§170) afirma que a fé é um dom, mas deve ser professada conforme a doutrina da Igreja.`
+  },
+  {
+    pergunta: "Por que a castidade antes do casamento é importante?",
+    resposta: `Porque o sexo é sagrado e reservado à aliança do matrimônio. 1Coríntios 6:18-20: \"Vosso corpo é templo do Espírito Santo.\" O Catecismo (§2337-2349) ensina que a castidade é a integração da sexualidade na pessoa.`
+  },
+  {
+    pergunta: "Por que a Igreja é contra eutanásia?",
+    resposta: `Porque somente Deus é Senhor da vida. Êxodo 20:13: \"Não matarás.\" O Catecismo (§2276-2279) afirma que causar a morte para eliminar o sofrimento é moralmente inaceitável.`
+  },
+  {
+    "pergunta": "Por que a Igreja tem devoções específicas, como a devoção ao Sagrado Coração de Jesus?",
+    "resposta_biblia": "Na Bíblia, vemos a expressão do amor de Jesus por nós, como em João 13:34-35, onde Ele nos pede para nos amarmos como Ele nos amou. A devoção ao Sagrado Coração é uma forma de expressar esse amor profundo e imenso de Cristo por toda a humanidade. Em Efésios 3:18-19, São Paulo fala sobre o amor de Cristo, que excede todo o conhecimento.",
+    "resposta_catecismo": "O Catecismo da Igreja Católica ensina que as devoções são formas de cultuar Deus e expressar nossa união com Ele. A devoção ao Sagrado Coração de Jesus é uma prática que busca meditar sobre o amor de Cristo e imitar suas virtudes (Catecismo, 1674)."
+  },
+  {
+    "pergunta": "Por que o Santo Ofício (Inquisição) foi criado e qual era o seu objetivo?",
+    "resposta_biblia": "Embora a Inquisição não tenha uma base direta na Bíblia, o Novo Testamento fala sobre a necessidade de preservar a verdadeira doutrina e corrigir erros. Em 2 João 1:10-11, por exemplo, alerta-se contra aqueles que negam a verdadeira fé.",
+    "resposta_catecismo": "O Catecismo não defende a Inquisição como uma instituição positiva, mas reconhece que foi uma resposta de defesa da fé em tempos de grande heresia. A Igreja busca preservar a verdade e corrigir os desvios, embora muitos dos métodos usados na Inquisição fossem errados e condenados pela Igreja (Catecismo, 862)."
+  },
+  {
+    "pergunta": "Por que a Igreja Católica ensina que a Eucaristia é o corpo e o sangue de Cristo e não apenas um símbolo?",
+    "resposta_biblia": "Na Bíblia, especialmente em João 6:53-56, Jesus diz: 'Se alguém não comer a carne do Filho do Homem e não beber o seu sangue, não terá a vida em vós.' Ele fala claramente que o pão e o vinho se tornam Seu corpo e sangue, e não apenas símbolos.",
+    "resposta_catecismo": "O Catecismo ensina que a Eucaristia é verdadeiramente o corpo e sangue de Cristo, embora a aparência seja de pão e vinho. Isso é ensinado na Igreja desde os primeiros tempos, com base nas palavras de Jesus na Última Ceia (Catecismo, 1374-1377)."
+  },
+  {
+    "pergunta": "Por que a Igreja ensina que o matrimônio é indissolúvel?",
+    "resposta_biblia": "Em Mateus 19:6, Jesus diz: 'Assim, já não são mais dois, mas uma só carne. Portanto, o que Deus uniu, o homem não separe.' Isso ensina a indissolubilidade do matrimônio.",
+    "resposta_catecismo": "O Catecismo da Igreja Católica ensina que o matrimônio é um sacramento indissolúvel, baseado nas palavras de Jesus. O casamento é um vínculo sagrado que não pode ser desfeito (Catecismo, 1644-1654)."
+  },
+  {
+    "pergunta": "Por que é importante a oração e a penitência durante a Quaresma?",
+    "resposta_biblia": "Em Mateus 6:16-18, Jesus ensina sobre o jejum e a oração, dizendo que devemos fazer isso de forma discreta, sem buscar a aprovação dos outros. A Quaresma é um tempo de preparação para a Páscoa e de arrependimento, seguindo o exemplo de Cristo no deserto.",
+    "resposta_catecismo": "O Catecismo ensina que a Quaresma é um tempo de penitência, oração e jejum, a fim de nos prepararmos para a Páscoa. A Igreja nos convida a nos purificar e a nos renovar espiritualmente durante esse período (Catecismo, 540-546)."
+  },
+  {
+    pergunta: "O que significa o sacramento da Confissão e por que não podemos confessar nossos pecados diretamente a Deus?",
+    resposta: "O sacramento da Confissão, também conhecido como Reconcilição ou Penitência, é uma prática instituída por Jesus para a remissão dos pecados cometidos após o batismo. A Igreja ensina que a confissão deve ser feita a um sacerdote, que age como mediador, com autoridade dada por Cristo.",
+    baseBiblica: [
+      "João 20:21-23: ‘De novo, Jesus disse: A paz esteja com vocês! Assim como o Pai me enviou, eu os envio’. E, com isso, soprou sobre eles e disse: ‘Recebam o Espírito Santo. Se perdoarem os pecados de alguém, eles são perdoados; se não os perdoarem, eles não são perdoados’.",
+      "2 Coríntios 5:18: ‘Tudo isso vem de Deus, que nos reconciliou consigo por meio de Cristo e nos deu o ministério da reconciliação.’"
+    ]
+  },
+  {
+    pergunta: "Onde está na Bíblia que a Igreja tem a autoridade para canonizar santos?",
+    resposta: "A Igreja Católica tem a autoridade para canonizar santos, ou seja, reconhecer oficialmente alguém como um santo, com base na sua virtude exemplar e na certeza de que estão na presença de Deus. A autoridade para essa prática é dada por Cristo à Igreja, como guardiã da verdade e da santidade.",
+    baseBiblica: [
+      "Mateus 18:18: ‘Em verdade vos digo que tudo o que ligardes na terra será ligado no céu, e tudo o que desligardes na terra será desligado no céu.’",
+      "Atos 9:36-42: O exemplo de Tabita (Dorcas), uma mulher descrita como 'cheia de boas obras', sendo ressuscitada por Pedro, é visto como um reconhecimento da virtude e da santidade de uma pessoa pela Igreja."
+    ]
+  },
+  {
+    pergunta: "Onde está na Bíblia a Assunção de Maria?",
+    resposta: "A Assunção de Maria é a crença de que, ao fim de sua vida, Maria foi tomada em corpo e alma para o céu. Embora esse dogma não seja explicitamente mencionado na Bíblia, ele é fundamentado em princípios bíblicos e na Tradição da Igreja. A Igreja o declarou como dogma em 1950, afirmando que Maria, devido à sua santidade e papel como Mãe de Deus, foi preservada da corrupção do corpo.",
+    baseBiblica: [
+      "Apocalipse 12:1: ‘Apareceu no céu um grande sinal: uma mulher vestida de sol, com a lua debaixo dos pés e uma coroa de doze estrelas na cabeça.’",
+      "Lucas 1:48: ‘Pois ele olhou para a humildade de sua serva. De agora em diante, todas as gerações me chamarão bem-aventurada.’"
+    ]
+  }
+
+        ];
+
+        const listaPerguntasElement = document.getElementById('lista-perguntas');
+
+        // Exibe perguntas sugeridas
+        bancoDeRespostas.forEach(item => {
+            const listItem = document.createElement('li');
+            listItem.textContent = item.pergunta;
+            listItem.addEventListener('click', () => {
+                document.getElementById('pergunta').value = item.pergunta;
+                exibirRespostaEspecifica(item);
+            });
+            listaPerguntasElement.appendChild(listItem);
+        });
+
+        function exibirRespostaEspecifica(item) {
+            const resultadoDiv = document.getElementById("resultado");
+            resultadoDiv.innerHTML = `
+                <h3>Resposta:</h3>
+                <div class="resposta-item">
+                    <h4>${item.pergunta}</h4>
+                    ${item.resposta}
+                </div>
+            `;
+            // Rola suavemente até a seção de resultado
+            resultadoDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function buscarResposta() {
+            const perguntaDigitada = document.getElementById("pergunta").value.toLowerCase().trim();
+            const resultadoDiv = document.getElementById("resultado");
+            resultadoDiv.innerHTML = "";
+
+            if (!perguntaDigitada) {
+                resultadoDiv.innerHTML = "<p>Por favor, digite uma pergunta.</p>";
+                return;
+            }
+
+            const palavrasChave = perguntaDigitada.split(/\s+/);
+            let perguntasEncontradas = [];
+
+            for (const item of bancoDeRespostas) {
+                const perguntaLower = item.pergunta.toLowerCase();
+                const corresponde = palavrasChave.some(palavra => perguntaLower.includes(palavra));
+                if (corresponde) {
+                    perguntasEncontradas.push(item);
+                }
+            }
+
+            if (perguntasEncontradas.length > 0) {
+                resultadoDiv.innerHTML = "<h3>Perguntas encontradas:</h3><ul>";
+                perguntasEncontradas.forEach(item => {
+                    resultadoDiv.innerHTML += `
+                        <li class="pergunta-resultado">${item.pergunta}</li>
+                    `;
+                });
+                resultadoDiv.innerHTML += "</ul>";
+
+                // Adiciona evento de clique para cada pergunta no resultado
+                const perguntasResultados = document.querySelectorAll('.pergunta-resultado');
+                perguntasResultados.forEach((perguntaElement, index) => {
+                    perguntaElement.addEventListener('click', () => {
+                        exibirRespostaEspecifica(perguntasEncontradas[index]);
+                    });
+                });
+
+                // Rola suavemente até a seção de resultado
+                resultadoDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            } else {
+                resultadoDiv.innerHTML = "<p>Nenhuma pergunta encontrada. Tente outra palavra ou selecione uma sugerida.</p>";
+            }
+        }
+
+        // Busca ao pressionar Enter
+        document.getElementById("pergunta").addEventListener("keydown", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                buscarResposta();
+            }
+        });
+    </script>
+</body>
+</html>
