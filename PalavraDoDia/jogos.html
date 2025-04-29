@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Jogos Católicos</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 0;
+      background-color: #f4f4f4;
+    }
+    header {
+      background-color: #336699;
+      color: white;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+    nav a {
+      color: white;
+      margin-left: 15px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    nav a:hover {
+      text-decoration: underline;
+    }
+    main {
+      padding: 20px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    section {
+      background-color: white;
+      padding: 20px;
+      margin-bottom: 30px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    table.wordsearch {
+      border-collapse: collapse;
+      margin: 0 auto;
+      font-family: monospace;
+      user-select: text;
+    }
+    table.wordsearch td {
+      width: 20px;
+      height: 20px;
+      text-align: center;
+      border: 1px solid #ccc;
+      cursor: pointer;
+      user-select: text;
+    }
+    .question {
+      margin-top: 10px;
+    }
+    .options button {
+      margin: 5px;
+    }
+    h2 {
+      text-align: center;
+    }
+    #wordList {
+      text-align: center;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Jogos Católicos</h1>
+    <nav>
+      <a href="index.html">Palavra do Dia</a>
+      <a href="faq.html">Perguntas Frequentes</a>
+      <a href="oracoes.html">Orações</a>
+      <a href="jogos.html">Jogos</a>
+    </nav>
+  </header>
+
+  <main>
+    <section>
+      <h2>Caça-Palavras Temático</h2>
+      <label for="tema">Escolha um tema:</label>
+      <select id="tema" onchange="gerarCacaPalavras()">
+        <option value="sacramentos">Sacramentos</option>
+        <option value="apostolos">Apóstolos</option>
+        <option value="mandamentos">Mandamentos</option>
+        <option value="profetas">Profetas</option>
+      </select>
+      <div id="grade"></div>
+      <p id="wordList">Palavras: </p>
+    </section>
+
+    <section>
+      <h2>Quiz Bíblico/Teológico</h2>
+      <div class="question" id="quizPergunta">Carregando pergunta...</div>
+      <div class="options" id="quizOpcoes"></div>
+      <div id="quizResultado"></div>
+      <button onclick="proximaPergunta()">Próxima Pergunta</button>
+    </section>
+
+    <section>
+      <h2>Batalha Espiritual - Quiz</h2>
+      <p id="batalhaPergunta">Carregando pergunta...</p>
+      <div id="batalhaOpcoes"></div>
+      <p id="batalhaResultado"></p>
+      <p>Vida do jogador: <span id="vidaJogador">100</span></p>
+      <p>Vida do inimigo: <span id="vidaInimigo">100</span></p>
+      <button onclick="proximaPerguntaBatalha()">Próxima Pergunta</button>
+    </section>
+  </main>
+
+  <script>
+    // ========== Caça Palavras ==========
+    const temas = {
+      sacramentos: ["Batismo", "Eucaristia", "Crisma", "Penitência", "Unção", "Ordem", "Matrimônio"],
+      apostolos: ["Pedro", "Tiago", "João", "André", "Felipe", "Bartolomeu", "Mateus", "Tomé", "TiagoMenor", "Judas", "Simão", "Matias"],
+      mandamentos: ["Deus", "Nome", "Domingo", "PaiMae", "Matar", "Adultério", "Roubar", "Mentira", "CobiçarBem", "CobiçarMulher"],
+      profetas: ["Isaías", "Jeremias", "Ezequiel", "Daniel", "Oséias", "Joel", "Amós", "Jonas", "Miquéias", "Zacarias"]
+    };
+
+    function gerarCacaPalavras() {
+      const tema = document.getElementById('tema').value;
+      const palavras = temas[tema];
+      const gridSize = 25;
+      const letras = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+      let grid = Array.from({ length: gridSize }, () => Array(gridSize).fill(''));
+
+      palavras.forEach((palavra, index) => {
+        let row = index % gridSize;
+        let col = Math.floor(Math.random() * (gridSize - palavra.length));
+        for (let i = 0; i < palavra.length; i++) {
+          grid[row][col + i] = palavra[i].toUpperCase();
+        }
+      });
+
+      for (let r = 0; r < gridSize; r++) {
+        for (let c = 0; c < gridSize; c++) {
+          if (!grid[r][c]) {
+            grid[r][c] = letras[Math.floor(Math.random() * letras.length)];
+          }
+        }
+      }
+
+      const gradeDiv = document.getElementById('grade');
+      let tabela = '<table class="wordsearch">';
+      for (let r = 0; r < gridSize; r++) {
+        tabela += '<tr>';
+        for (let c = 0; c < gridSize; c++) {
+          tabela += `<td>${grid[r][c]}</td>`;
+        }
+        tabela += '</tr>';
+      }
+      tabela += '</table>';
+      gradeDiv.innerHTML = tabela;
+
+      document.getElementById('wordList').innerText = 'Palavras: ' + palavras.join(', ');
+    }
+
+    gerarCacaPalavras();
+
+    // ========== Quiz Bíblico ==========
+    const perguntasQuiz = [
+      {
+        pergunta: "Qual é o primeiro livro da Bíblia?",
+        opcoes: ["Êxodo", "Salmos", "Gênesis", "Mateus"],
+        resposta: "Gênesis"
+      },
+      {
+        pergunta: "Quem libertou os hebreus do Egito?",
+        opcoes: ["Abraão", "Moisés", "Davi", "Jesus"],
+        resposta: "Moisés"
+      }
+    ];
+
+    let perguntaAtual = 0;
+
+    function mostrarPergunta() {
+      const p = perguntasQuiz[perguntaAtual];
+      document.getElementById('quizPergunta').innerText = p.pergunta;
+      const opcoes = document.getElementById('quizOpcoes');
+      opcoes.innerHTML = '';
+      p.opcoes.forEach(op => {
+        const btn = document.createElement('button');
+        btn.innerText = op;
+        btn.onclick = () => {
+          document.getElementById('quizResultado').innerText =
+            op === p.resposta ? "Correto!" : "Errado!";
+        };
+        opcoes.appendChild(btn);
+      });
+    }
+
+    function proximaPergunta() {
+      perguntaAtual = (perguntaAtual + 1) % perguntasQuiz.length;
+      mostrarPergunta();
+    }
+
+    mostrarPergunta();
+
+    // ========== Batalha Espiritual ==========
+    let vidaJogador = 100;
+    let vidaInimigo = 100;
+    const perguntasBatalha = [
+      {
+        pergunta: "Qual sacramento apaga o pecado original?",
+        opcoes: ["Crisma", "Eucaristia", "Batismo", "Penitência"],
+        resposta: "Batismo"
+      },
+      {
+        pergunta: "Quantos evangelhos há na Bíblia?",
+        opcoes: ["2", "4", "3", "5"],
+        resposta: "4"
+      }
+    ];
+    let indexBatalha = 0;
+
+    function mostrarPerguntaBatalha() {
+      const p = perguntasBatalha[indexBatalha];
+      document.getElementById('batalhaPergunta').innerText = p.pergunta;
+      const opcoes = document.getElementById('batalhaOpcoes');
+      opcoes.innerHTML = '';
+      p.opcoes.forEach(op => {
+        const btn = document.createElement('button');
+        btn.innerText = op;
+        btn.onclick = () => {
+          if (op === p.resposta) {
+            vidaInimigo -= 20;
+            document.getElementById('batalhaResultado').innerText = "Acertou! Inimigo perdeu 20 de vida.";
+          } else {
+            vidaJogador -= 10;
+            document.getElementById('batalhaResultado').innerText = "Errou! Você perdeu 10 de vida.";
+          }
+          document.getElementById('vidaJogador').innerText = vidaJogador;
+          document.getElementById('vidaInimigo').innerText = vidaInimigo;
+        };
+        opcoes.appendChild(btn);
+      });
+    }
+
+    function proximaPerguntaBatalha() {
+      indexBatalha = (indexBatalha + 1) % perguntasBatalha.length;
+      mostrarPerguntaBatalha();
+    }
+
+    mostrarPerguntaBatalha();
+  </script>
+</body>
+</html>
