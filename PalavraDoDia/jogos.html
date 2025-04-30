@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Jogos Católicos</title>
   <style>
     body {
@@ -10,6 +10,7 @@
       margin: 0;
       background-color: #f4f4f4;
     }
+
     header {
       background-color: #336699;
       color: white;
@@ -18,64 +19,201 @@
       justify-content: space-between;
       align-items: center;
     }
+
     header h1 {
       margin: 0;
       font-size: 1.5rem;
     }
+
     nav a {
       color: white;
       margin-left: 15px;
       text-decoration: none;
       font-weight: bold;
     }
+
     nav a:hover {
       text-decoration: underline;
     }
-    main {
-      padding: 20px;
-      max-width: 1000px;
-      margin: 0 auto;
+
+    h1, h2 {
+      color: #336699;
+      text-align: center;
     }
-    section {
-      background-color: white;
+
+    .game {
+      background-color: #ffffff;
       padding: 20px;
-      margin-bottom: 30px;
+      margin: 20px auto;
       border-radius: 10px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      max-width: 600px;
     }
-    table.wordsearch {
-      border-collapse: collapse;
-      margin: 0 auto;
-      font-family: monospace;
-      user-select: text;
-    }
-    table.wordsearch td {
-      width: 20px;
-      height: 20px;
-      text-align: center;
-      border: 1px solid #ccc;
-      cursor: pointer;
-      user-select: text;
-    }
-    .question {
+
+    button {
+      padding: 10px 15px;
       margin-top: 10px;
+      border: none;
+      border-radius: 5px;
+      background-color: #336699;
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
     }
-    .options button {
-      margin: 5px;
+
+    button.correct {
+      background-color: #28a745;
     }
-    h2 {
-      text-align: center;
-    }
-    #wordList {
-      text-align: center;
+
+    .feedback {
       margin-top: 10px;
       font-weight: bold;
+    }
+
+    .word-grid {
+      display: grid;
+      grid-template-columns: repeat(10, 30px);
+      gap: 2px;
+      justify-content: center;
+      margin-top: 10px;
+      user-select: none;
+    }
+
+    .cell {
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #e0f0ff;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .selected {
+      background-color: yellow;
+    }
+
+    .found {
+      background-color: #28a745;
+      color: white;
+    }
+
+    .error {
+      animation: blinkRed 0.5s 2;
+    }
+
+    @keyframes blinkRed {
+      0%, 100% { background-color: #e0f0ff; }
+      50% { background-color: red; }
+    }
+
+
+
+    
+    body {
+      font-family: sans-serif;
+      margin: 0;
+      background-color: #f4f4f4;
+    }
+
+    header {
+      background-color: #336699;
+      color: white;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+
+    nav a {
+      color: white;
+      margin-left: 15px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    .game {
+      background-color: #ffffff;
+      padding: 20px;
+      margin: 20px auto;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      max-width: 600px;
+    }
+
+    button {
+      padding: 10px 15px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 5px;
+      background-color: #336699;
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    button.correct {
+      background-color: #28a745;
+    }
+
+    .feedback {
+      margin-top: 10px;
+      font-weight: bold;
+    }
+
+    .word-grid {
+      display: grid;
+      grid-template-columns: repeat(10, 30px);
+      gap: 2px;
+      justify-content: center;
+      margin-top: 10px;
+      user-select: none;
+    }
+
+    .cell {
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #e0f0ff;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .selected {
+      background-color: yellow;
+    }
+
+    .found {
+      background-color: #28a745;
+      color: white;
+    }
+
+    .error {
+      animation: blinkRed 0.5s 2;
+    }
+
+    @keyframes blinkRed {
+      0%, 100% { background-color: #e0f0ff; }
+      50% { background-color: red; }
     }
   </style>
 </head>
 <body>
+
   <header>
-    <h1>Jogos Católicos</h1>
+    <h1>Palavra do Dia</h1>
     <nav>
       <a href="index.html">Palavra do Dia</a>
       <a href="faq.html">Perguntas Frequentes</a>
@@ -84,173 +222,214 @@
     </nav>
   </header>
 
-  <main>
-    <section>
-      <h2>Caça-Palavras Temático</h2>
-      <label for="tema">Escolha um tema:</label>
-      <select id="tema" onchange="gerarCacaPalavras()">
-        <option value="sacramentos">Sacramentos</option>
-        <option value="apostolos">Apóstolos</option>
-        <option value="mandamentos">Mandamentos</option>
-        <option value="profetas">Profetas</option>
-      </select>
-      <div id="grade"></div>
-      <p id="wordList">Palavras: </p>
-    </section>
+  <h1>Jogos Católicos</h1>
 
-    <section>
-      <h2>Quiz Bíblico/Teológico</h2>
-      <div class="question" id="quizPergunta">Carregando pergunta...</div>
-      <div class="options" id="quizOpcoes"></div>
-      <div id="quizResultado"></div>
-      <button onclick="proximaPergunta()">Próxima Pergunta</button>
-    </section>
+  <div class="game" id="quizGame">
+    <h2>Quiz Bíblico</h2>
+    <p id="question">Carregando pergunta...</p>
+    <div id="options"></div>
+    <div id="quizFeedback" class="feedback"></div>
+    <button id="nextBtn" onclick="nextQuestion()">Próxima Pergunta</button>
+  </div>
 
-    <section>
-      <h2>Batalha Espiritual - Quiz</h2>
-      <p id="batalhaPergunta">Carregando pergunta...</p>
-      <div id="batalhaOpcoes"></div>
-      <p id="batalhaResultado"></p>
-      <p>Vida do jogador: <span id="vidaJogador">100</span></p>
-      <p>Vida do inimigo: <span id="vidaInimigo">100</span></p>
-      <button onclick="proximaPerguntaBatalha()">Próxima Pergunta</button>
-    </section>
-  </main>
+  <div class="game" id="wordSearchGame">
+    <h2>Caça-palavras Temático</h2>
+    <p id="wordList">Encontre as palavras: fé, amor, Deus, cruz, oração</p>
+    <div class="word-grid" id="wordSearch"></div>
+    <button id="nextWordBtn" onclick="nextWord()">Próximo Caça-palavras</button>
+  </div>
+
+  <div class="game" id="battleGame">
+    <h2>Batalha Espiritual</h2>
+    <p id="battleQuestion">Carregando batalha...</p>
+    <div id="battleOptions"></div>
+    <div id="battleFeedback" class="feedback"></div>
+    <button id="battleNextBtn" onclick="nextBattle()">Próxima Batalha</button>
+  </div>
 
   <script>
-    // ========== Caça Palavras ==========
-    const temas = {
-      sacramentos: ["Batismo", "Eucaristia", "Crisma", "Penitência", "Unção", "Ordem", "Matrimônio"],
-      apostolos: ["Pedro", "Tiago", "João", "André", "Felipe", "Bartolomeu", "Mateus", "Tomé", "TiagoMenor", "Judas", "Simão", "Matias"],
-      mandamentos: ["Deus", "Nome", "Domingo", "PaiMae", "Matar", "Adultério", "Roubar", "Mentira", "CobiçarBem", "CobiçarMulher"],
-      profetas: ["Isaías", "Jeremias", "Ezequiel", "Daniel", "Oséias", "Joel", "Amós", "Jonas", "Miquéias", "Zacarias"]
-    };
-
-    function gerarCacaPalavras() {
-      const tema = document.getElementById('tema').value;
-      const palavras = temas[tema];
-      const gridSize = 25;
-      const letras = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-      let grid = Array.from({ length: gridSize }, () => Array(gridSize).fill(''));
-
-      palavras.forEach((palavra, index) => {
-        let row = index % gridSize;
-        let col = Math.floor(Math.random() * (gridSize - palavra.length));
-        for (let i = 0; i < palavra.length; i++) {
-          grid[row][col + i] = palavra[i].toUpperCase();
-        }
-      });
-
-      for (let r = 0; r < gridSize; r++) {
-        for (let c = 0; c < gridSize; c++) {
-          if (!grid[r][c]) {
-            grid[r][c] = letras[Math.floor(Math.random() * letras.length)];
-          }
-        }
-      }
-
-      const gradeDiv = document.getElementById('grade');
-      let tabela = '<table class="wordsearch">';
-      for (let r = 0; r < gridSize; r++) {
-        tabela += '<tr>';
-        for (let c = 0; c < gridSize; c++) {
-          tabela += `<td>${grid[r][c]}</td>`;
-        }
-        tabela += '</tr>';
-      }
-      tabela += '</table>';
-      gradeDiv.innerHTML = tabela;
-
-      document.getElementById('wordList').innerText = 'Palavras: ' + palavras.join(', ');
-    }
-
-    gerarCacaPalavras();
-
-    // ========== Quiz Bíblico ==========
-    const perguntasQuiz = [
-      {
-        pergunta: "Qual é o primeiro livro da Bíblia?",
-        opcoes: ["Êxodo", "Salmos", "Gênesis", "Mateus"],
-        resposta: "Gênesis"
-      },
-      {
-        pergunta: "Quem libertou os hebreus do Egito?",
-        opcoes: ["Abraão", "Moisés", "Davi", "Jesus"],
-        resposta: "Moisés"
-      }
+    const quizQuestions = [
+      { question: 'Quem foi o primeiro homem criado por Deus?', options: ['Moisés', 'Adão', 'Abraão', 'Pedro'], answer: 'Adão' },
+      { question: 'Qual o nome da mãe de Jesus?', options: ['Maria', 'Isabel', 'Marta', 'Sara'], answer: 'Maria' },
+      { question: 'Quantos livros tem a Bíblia Católica?', options: ['66', '70', '73', '75'], answer: '73' }
     ];
+    let quizIndex = 0;
 
-    let perguntaAtual = 0;
-
-    function mostrarPergunta() {
-      const p = perguntasQuiz[perguntaAtual];
-      document.getElementById('quizPergunta').innerText = p.pergunta;
-      const opcoes = document.getElementById('quizOpcoes');
-      opcoes.innerHTML = '';
-      p.opcoes.forEach(op => {
-        const btn = document.createElement('button');
-        btn.innerText = op;
-        btn.onclick = () => {
-          document.getElementById('quizResultado').innerText =
-            op === p.resposta ? "Correto!" : "Errado!";
-        };
-        opcoes.appendChild(btn);
-      });
-    }
-
-    function proximaPergunta() {
-      perguntaAtual = (perguntaAtual + 1) % perguntasQuiz.length;
-      mostrarPergunta();
-    }
-
-    mostrarPergunta();
-
-    // ========== Batalha Espiritual ==========
-    let vidaJogador = 100;
-    let vidaInimigo = 100;
-    const perguntasBatalha = [
-      {
-        pergunta: "Qual sacramento apaga o pecado original?",
-        opcoes: ["Crisma", "Eucaristia", "Batismo", "Penitência"],
-        resposta: "Batismo"
-      },
-      {
-        pergunta: "Quantos evangelhos há na Bíblia?",
-        opcoes: ["2", "4", "3", "5"],
-        resposta: "4"
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
       }
-    ];
-    let indexBatalha = 0;
+    }
+    shuffle(quizQuestions);
 
-    function mostrarPerguntaBatalha() {
-      const p = perguntasBatalha[indexBatalha];
-      document.getElementById('batalhaPergunta').innerText = p.pergunta;
-      const opcoes = document.getElementById('batalhaOpcoes');
-      opcoes.innerHTML = '';
-      p.opcoes.forEach(op => {
+    function loadQuestion() {
+      const q = quizQuestions[quizIndex];
+      document.getElementById('question').textContent = q.question;
+      const optionsDiv = document.getElementById('options');
+      optionsDiv.innerHTML = '';
+      document.getElementById('quizFeedback').textContent = '';
+      document.getElementById('nextBtn').classList.remove('correct');
+      q.options.forEach(opt => {
         const btn = document.createElement('button');
-        btn.innerText = op;
+        btn.textContent = opt;
         btn.onclick = () => {
-          if (op === p.resposta) {
-            vidaInimigo -= 20;
-            document.getElementById('batalhaResultado').innerText = "Acertou! Inimigo perdeu 20 de vida.";
+          if (opt === q.answer) {
+            document.getElementById('quizFeedback').textContent = '✅ Resposta correta!';
+            document.getElementById('nextBtn').classList.add('correct');
           } else {
-            vidaJogador -= 10;
-            document.getElementById('batalhaResultado').innerText = "Errou! Você perdeu 10 de vida.";
+            document.getElementById('quizFeedback').textContent = '❌ Resposta incorreta. Tente novamente!';
           }
-          document.getElementById('vidaJogador').innerText = vidaJogador;
-          document.getElementById('vidaInimigo').innerText = vidaInimigo;
-        };
-        opcoes.appendChild(btn);
+        }
+        optionsDiv.appendChild(btn);
       });
     }
 
-    function proximaPerguntaBatalha() {
-      indexBatalha = (indexBatalha + 1) % perguntasBatalha.length;
-      mostrarPerguntaBatalha();
+    function nextQuestion() {
+      quizIndex = (quizIndex + 1) % quizQuestions.length;
+      loadQuestion();
+    }
+    loadQuestion();
+
+    const wordSearchGames = [
+      { words: ['FE', 'AMOR', 'DEUS', 'CRUZ', 'ORACAO'], gridSize: 10 },
+      { words: ['GRACIA', 'PAZ', 'ESPIRITO', 'ALEGRIA'], gridSize: 12 }
+    ];
+    let currentGameIndex = 0;
+
+    function createWordSearch(game) {
+      const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      const gridSize = game.gridSize;
+      const words = game.words;
+
+      const grid = Array(gridSize).fill(null).map(() => Array(gridSize).fill(''));
+      const directions = [
+        [0,1], [1,0], [1,1], [-1,1], [0,-1], [-1,0], [-1,-1], [1,-1]
+      ];
+
+      function canPlace(word, row, col, dx, dy) {
+        for (let i = 0; i < word.length; i++) {
+          const r = row + i * dy, c = col + i * dx;
+          if (r < 0 || r >= gridSize || c < 0 || c >= gridSize || (grid[r][c] && grid[r][c] !== word[i])) return false;
+        }
+        return true;
+      }
+
+      function placeWord(word) {
+        let placed = false;
+        while (!placed) {
+          const dir = directions[Math.floor(Math.random() * directions.length)];
+          const row = Math.floor(Math.random() * gridSize);
+          const col = Math.floor(Math.random() * gridSize);
+          if (canPlace(word, row, col, dir[0], dir[1])) {
+            for (let i = 0; i < word.length; i++) {
+              grid[row + i * dir[1]][col + i * dir[0]] = word[i];
+            }
+            placed = true;
+          }
+        }
+      }
+
+      words.forEach(w => placeWord(w));
+      for (let r = 0; r < gridSize; r++) {
+        for (let c = 0; c < gridSize; c++) {
+          if (!grid[r][c]) grid[r][c] = letters[Math.floor(Math.random() * letters.length)];
+        }
+      }
+
+      const wordGrid = document.getElementById('wordSearch');
+      wordGrid.innerHTML = '';
+      let selectedCells = [];
+
+      function clearSelection() {
+        selectedCells.forEach(c => c.classList.remove('selected'));
+        selectedCells = [];
+      }
+
+      function getWordFromCells(cells) {
+        return cells.map(c => c.textContent).join('');
+      }
+
+      for (let r = 0; r < gridSize; r++) {
+        for (let c = 0; c < gridSize; c++) {
+          const cell = document.createElement('div');
+          cell.className = 'cell';
+          cell.textContent = grid[r][c];
+          cell.dataset.row = r;
+          cell.dataset.col = c;
+          cell.addEventListener('mousedown', (e) => {
+            if (cell.classList.contains('found')) return;
+            clearSelection();
+            cell.classList.add('selected');
+            selectedCells.push(cell);
+          });
+          cell.addEventListener('mouseenter', (e) => {
+            if (e.buttons !== 1 || cell.classList.contains('found')) return;
+            cell.classList.add('selected');
+            selectedCells.push(cell);
+          });
+          cell.addEventListener('mouseup', () => {
+            const selectedWord = getWordFromCells(selectedCells);
+            if (words.includes(selectedWord)) {
+              selectedCells.forEach(c => {
+                c.classList.remove('selected');
+                c.classList.add('found');
+              });
+            } else {
+              selectedCells.forEach(c => {
+                c.classList.add('error');
+                setTimeout(() => c.classList.remove('error'), 500);
+              });
+            }
+            clearSelection();
+          });
+          wordGrid.appendChild(cell);
+        }
+      }
     }
 
-    mostrarPerguntaBatalha();
+    function nextWord() {
+      currentGameIndex = (currentGameIndex + 1) % wordSearchGames.length;
+      createWordSearch(wordSearchGames[currentGameIndex]);
+    }
+
+    createWordSearch(wordSearchGames[currentGameIndex]);
+
+    const battleQuestions = [
+      { question: 'Qual é a armadura de Deus segundo Efésios 6?', options: ['Capacete da esperança', 'Espada do Espírito', 'Escudo da fé', 'Todos os itens anteriores'], answer: 'Todos os itens anteriores' },
+      { question: 'Quem é o nosso adversário espiritual?', options: ['Carne', 'Mundo', 'Demônio', 'Todos eles'], answer: 'Todos eles' }
+    ];
+    shuffle(battleQuestions);
+    let battleIndex = 0;
+
+    function loadBattle() {
+      const q = battleQuestions[battleIndex];
+      document.getElementById('battleQuestion').textContent = q.question;
+      const optionsDiv = document.getElementById('battleOptions');
+      optionsDiv.innerHTML = '';
+      document.getElementById('battleFeedback').textContent = '';
+      document.getElementById('battleNextBtn').classList.remove('correct');
+      q.options.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.textContent = opt;
+        btn.onclick = () => {
+          if (opt === q.answer) {
+            document.getElementById('battleFeedback').textContent = '🛡️ Você venceu essa batalha espiritual!';
+            document.getElementById('battleNextBtn').classList.add('correct');
+          } else {
+            document.getElementById('battleFeedback').textContent = '❌ Derrota! Mas levante-se e tente de novo.';
+          }
+        }
+        optionsDiv.appendChild(btn);
+      });
+    }
+
+    function nextBattle() {
+      battleIndex = (battleIndex + 1) % battleQuestions.length;
+      loadBattle();
+    }
+
+    loadBattle();
   </script>
 </body>
 </html>
